@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Load common variables and helpers
+source ./_common.sh
+
+# Set app specific variables
+app=$APPNAME
+dbname=$app
+dbuser=$app
+
+# Source app helpers
+source /usr/share/yunohost/helpers
+
+# Stop gogs
+sudo systemctl stop gogs.service
+
+# Drop MySQL database and user
+ynh_mysql_drop_db "$dbname" 2>/dev/null || true
+ynh_mysql_drop_user "$dbuser" 2>/dev/null || true
+
+# Retrieve domain from app settings
+domain=$(ynh_app_setting_get "$app" domain)
+
+# Delete app directory and configurations
+sudo rm -rf "/opt/${app}"
+[[ -n $domain ]] && sudo rm -f "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+sudo rm -rf /var/log/gogs
+sudo rm -f /etc/logrotate.d/gogs
+
+# Remove gogs user and data
+sudo userdel -r gogs
+
+# Remove init script
+sudo systemctl disable gogs.service
+sudo rm -f /etc/systemd/system/gogs.service
+sudo systemctl daemon-reload
+
+# Remove monitor
+sudo yunohost service remove gogs
+
+# Reload services
+sudo service nginx reload || true
+sudo service rsyslog restart  || true

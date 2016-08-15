@@ -1,0 +1,120 @@
+#!/bin/bash
+
+set -eu
+
+# Retrieve arguments
+domain=$1
+path=$2
+admin=$3
+is_public=$4
+
+# Load common variables
+source ./_common.sh
+
+# Set app specific variables
+app=$APPNAME
+dbname=$app
+dbuser=$app
+
+# Source app helpers
+source /usr/share/yunohost/helpers
+
+# TODO: Check domain/path availability with app helper
+sudo yunohost app checkurl "${domain}${path}" -a "$app" \
+  || ynh_die "The path ${domain}${path} is not available for app installation."
+
+# Check user parameter
+ynh_user_exists "$admin" \
+  || ynh_die "The chosen admin user does not exist."
+
+# Check destination directory
+DESTDIR="/opt/$app"
+[[ -d $DESTDIR ]] && ynh_die \
+"The destination directory '$DESTDIR' already exists.\
+ You should safely delete it before installing this app."
+
+# Generate random password and key
+dbpass=$(ynh_string_random)
+key=$(ynh_string_random)
+
+# Initialize database and store mysql password for upgrade
+ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"
+ynh_app_setting_set $app mysqlpwd $dbpass
+ynh_app_setting_set $app adminusername $admin
+ynh_app_setting_set $app is_public $is_public
+ynh_app_setting_set $app secret_key $is_public
+
+# Add users
+id -g gogs &>/dev/null || sudo addgroup gogs --system --quiet
+id -u gogs &>/dev/null || sudo adduser gogs --disabled-login \
+    --ingroup gogs --system --quiet --shell /bin/bash
+
+# create needed directories
+REPO_PATH=/home/gogs/repositories
+DATA_PATH=/home/gogs/data
+sudo mkdir -p "$DESTDIR"/custom/conf "$REPO_PATH" "$DATA_PATH"/avatars \
+              "$DATA_PATH"/avatars "$DATA_PATH"/attachments /var/log/gogs
+sudo chown -R gogs:gogs /home/gogs /var/log/gogs
+
+# Install Gogs
+extract_gogs $DESTDIR
+
+# Configure gogs with app.ini file
+sudo cp ../conf/app.ini "$DESTDIR"/custom/conf
+sudo sed -i "s@yuno_repo_path@"$REPO_PATH"@g" "$DESTDIR"/custom/conf/app.ini
+if [ "$path" = "/" ]
+then
+    sudo sed -i "s@yuno_url@$domain@g" "$DESTDIR"/custom/conf/app.ini
+else
+    sudo sed -i "s@yuno_url@$domain${path%/}@g" "$DESTDIR"/custom/conf/app.ini
+fi
+sudo sed -i "s@yuno_dbpdw@$dbpass@g" "$DESTDIR"/custom/conf/app.ini
+sudo sed -i "s@yuno_dbuser@$dbuser@g" "$DESTDIR"/custom/conf/app.ini
+sudo sed -i "s@yuno_domain@$domain@g" "$DESTDIR"/custom/conf/app.ini
+sudo sed -i "s@yuno_key@$key@g" "$DESTDIR"/custom/conf/app.ini
+sudo sed -i "s@yuno_data_path@$DATA_PATH@g" "$DESTDIR"/custom/conf/app.ini
+
+# Configure logrotate
+sudo cp ../conf/logrotate /etc/logrotate.d/gogs
+
+# Configure init script
+sudo cp ../conf/gogs.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable gogs.service
+
+# Start gogs for building mysql tables
+sudo systemctl start gogs.service
+
+# Wait till login_source mysql table is created
+while ! $(ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname"  <<< "SELECT * FROM login_source;" &>/dev/null)
+do
+    sleep 2
+done
+
+# Add ldap config
+sudo sed -i "s@yuno_admin@$admin@g" ../conf/login_source.sql
+ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ../conf/login_source.sql
+
+# Add Gogs to YunoHost's monitored services
+sudo yunohost service add gogs --log /var/log/gogs.log
+
+# Modify Nginx configuration file and copy it to Nginx conf directory
+sed -i "s@PATHTOCHANGE@${path%/}@g" ../conf/nginx.conf
+if [ "$path" = "/" ]
+then
+    sed -i "s@COMMENT_IF_ROOT@#@g" ../conf/nginx.conf
+else
+    sed -i "s@COMMENT_IF_ROOT@@g" ../conf/nginx.conf
+fi
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+
+# Unprotect root from SSO if public
+if [ "$is_public" = "Yes" ]
+then
+    ynh_app_setting_set $app unprotected_uris "/"
+fi
+
+# Reload services
+sudo service rsyslog restart || true
+sudo service nginx reload || true
+sudo service gogs restart || true

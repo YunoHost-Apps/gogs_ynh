@@ -1,0 +1,87 @@
+#!/bin/bash
+
+set -eu
+
+# Load common variables and helpers
+source ./_common.sh
+
+# Set app specific variables
+app=$APPNAME
+dbname=$app
+dbuser=$app
+
+# Source app helpers
+source /usr/share/yunohost/helpers
+
+# Retrieve app settings
+domain=$(ynh_app_setting_get "$app" domain)
+path=$(ynh_app_setting_get "$app" path)
+dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
+admin=$(ynh_app_setting_get "$app" adminusername)
+key=$(ynh_app_setting_get "$app" secret_key)
+is_public=$(ynh_app_setting_get "$app" is_public)
+
+repo_path=$(ynh_app_setting_get "$app" repopath)
+
+# Stop service
+sudo systemctl stop gogs.service
+
+DESTDIR="/opt/$app"
+
+# create needed directories
+REPO_PATH=/home/gogs/repositories
+DATA_PATH=/home/gogs/data
+sudo mkdir -p "$DESTDIR"/custom/conf "$REPO_PATH" "$DATA_PATH"/avatars \
+              "$DATA_PATH"/avatars "$DATA_PATH"/attachments /var/log/gogs
+sudo chown -R gogs:gogs /home/gogs /var/log/gogs
+
+# Install Gogs
+extract_gogs $DESTDIR
+
+# Configure gogs with app.ini file
+sudo cp ../conf/app.ini "$DESTDIR"/custom/conf
+sudo sed -i "s@yuno_repo_path@"$REPO_PATH"@g" "$DESTDIR"/custom/conf/app.ini
+if [ "$path" = "/" ]
+then
+    sudo sed -i "s@yuno_url@$domain@g" "$DESTDIR"/custom/conf/app.ini
+else
+    sudo sed -i "s@yuno_url@$domain${path%/}@g" "$DESTDIR"/custom/conf/app.ini
+fi
+sudo sed -i "s@yuno_dbpdw@$dbpass@g" "$DESTDIR"/custom/conf/app.ini
+sudo sed -i "s@yuno_dbuser@$dbuser@g" "$DESTDIR"/custom/conf/app.ini
+sudo sed -i "s@yuno_domain@$domain@g" "$DESTDIR"/custom/conf/app.ini
+sudo sed -i "s@yuno_key@$key@g" "$DESTDIR"/custom/conf/app.ini
+sudo sed -i "s@yuno_data_path@$DATA_PATH@g" "$DESTDIR"/custom/conf/app.ini
+
+# Configure init script
+sudo cp ../conf/gogs.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable gogs.service
+
+# Configure logrotate
+sudo cp ../conf/logrotate /etc/logrotate.d/gogs
+
+# Restore ldap config
+sudo sed -i "s@yuno_admin@$admin@g" ../conf/login_source.sql
+ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ../conf/login_source.sql
+
+# Modify Nginx configuration file and copy it to Nginx conf directory
+sed -i "s@PATHTOCHANGE@${path%/}@g" ../conf/nginx.conf
+if [ "$path" = "/" ]
+then
+    sed -i "s@COMMENT_IF_ROOT@#@g" ../conf/nginx.conf
+else
+    sed -i "s@COMMENT_IF_ROOT@@g" ../conf/nginx.conf
+fi
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+
+# Unprotect root from SSO if public
+if [ "$is_public" = "Yes" ]
+then
+    ynh_app_setting_set $app unprotected_uris "/"
+fi
+
+# Reload services
+sudo service rsyslog restart || true
+sudo service nginx reload || true
+sudo service gogs start || true

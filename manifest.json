@@ -1,0 +1,56 @@
+{
+    "name": "Gogs",
+    "id": "gogs",
+    "description": {
+        "en": "A self-hosted Git service written in Go",
+        "fr": "A self-hosted Git service written in Go" 
+    },
+    "url": "http://gogs.io/",
+    "maintainer": {
+        "name": "mbugeia",
+        "email": "maxime@max.privy.place"
+    },
+    "multi_instance": "false",
+    "services": [
+        "nginx",
+        "mysql"
+    ],
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "ask": {
+                    "en": "Choose a domain for Gogs",
+                    "fr": "Choisissez un domaine pour Gogs"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "ask": {
+                    "en": "Choose a path for Gogs",
+                    "fr": "Choisissez un chemin pour Gogs"
+                },
+                "example": "/gogs",
+                "default": "/gogs"
+            },
+            {
+                "name": "admin",
+                "ask": {
+                    "en": "Choose the admin user for Gogs (must be an existing yunohost user)",
+                    "fr": "Choisissez l'administrateur de Gogs (doit être un utilisateur yunohost existant)"
+                },
+                "example": "johndoe"
+            },
+            {
+                "name": "public_site",
+                "ask": {
+                    "en": "Is it a public site ?",
+                    "fr": "Est-ce un site public ?"
+                },
+                "choices": ["Yes", "No"],
+                "default": "Yes"
+            }
+        ]
+    }
+}

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -eu
+
+# Set app specific variables
+app="gogs"
+dbname=$app
+dbuser=$app
+
+# Source app helpers
+source /usr/share/yunohost/helpers
+
+# Retrieve app settings
+domain=$(ynh_app_setting_get "$app" domain)
+dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
+repo_path=$(ynh_app_setting_get "$app" repopath)
+
+# Copy the app source files
+DESTDIR="/opt/$app"
+ynh_backup "$DESTDIR" "www"
+
+# Copy the data files
+DATADIR="/home/$app"
+ynh_backup "$DATADIR" "data"
+
+# Copy the conf files
+mkdir ./conf
+ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf" "conf/nginx.conf"
+ynh_backup "/etc/logrotate.d/${app}" "conf/logrotate"
+ynh_backup "/etc/systemd/system/${app}.service" "conf/systemd.service"
+
+# Dump the database
+mysqldump -u "$dbuser" -p"$dbpass" --no-create-db "$dbname" > ./db.sql
