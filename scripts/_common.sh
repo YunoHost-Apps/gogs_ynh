@@ -11,7 +11,7 @@ VERSION="0.9.71"
 case $(arch) in
 x86_64)  ARCHITECTURE="amd64"
     ;;
-i386)  ARCHITECTURE="386"
+i386|i686)  ARCHITECTURE="386"
     ;;
 armhf|armel)  ARCHITECTURE="arm"
     ;;

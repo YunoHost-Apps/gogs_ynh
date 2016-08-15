@@ -38,9 +38,6 @@ https://github.com/gogits/gogs/blob/master/LICENSE
 
 This package is published under MIT License
 
-TODO
-----
- - Backup and restore script need rework
 
 Developper infos
 ----------------
