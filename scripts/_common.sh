@@ -13,14 +13,14 @@ x86_64)  ARCHITECTURE="amd64"
     ;;
 i386|i686)  ARCHITECTURE="386"
     ;;
-armhf|armel)  ARCHITECTURE="arm"
+armhf|armel|armv7l)  ARCHITECTURE="arm"
     ;;
 *) echo "Unable to detect your achitecture" && exit 1
    ;;
 esac
 
 # Remote URL to fetch Gogs tarball
-GOGS_BINARY_URL="https://github.com/gogits/gogs/releases/download/v${VERSION}/linux_${ARCHITECTURE}.tar.gz"
+GOGS_BINARY_URL="https://github.com/gogits/gogs/releases/download/v${VERSION}/linux_${ARCHITECTURE}.zip"
 
 #
 # Common helpers
@@ -30,13 +30,15 @@ GOGS_BINARY_URL="https://github.com/gogits/gogs/releases/download/v${VERSION}/li
 # usage: extract_gogs DESTDIR
 extract_gogs() {
   local DESTDIR=$1
+  local TMPDIR=$(mktemp -d)
 
   # retrieve and extract Gogs tarball
-  gogs_tarball="/tmp/gogs.tar.gz"
+  gogs_tarball="/tmp/gogs.zip"
   rm -f "$gogs_tarball"
   wget -q -O "$gogs_tarball" "$GOGS_BINARY_URL" \
     || ynh_die "Unable to download Gogs tarball"
-  sudo tar xf "$gogs_tarball" -C "$DESTDIR" --strip-components 1 \
+  unzip -q "$gogs_tarball" -d "$TMPDIR" \
     || ynh_die "Unable to extract Gogs tarball"
-  rm -f "$gogs_tarball"
+  sudo mv "$TMPDIR"/gogs/* "$DESTDIR"
+  rm -rf "$gogs_tarball" "$TMPDIR"
 }
