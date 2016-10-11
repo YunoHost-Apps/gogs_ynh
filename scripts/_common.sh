@@ -5,7 +5,7 @@
 APPNAME="gogs"
 
 # Gogs version
-VERSION="0.9.71"
+VERSION="0.9.97"
 
 # Detect the system architecture to download the right tarball
 case $(arch) in
@@ -15,7 +15,8 @@ i386|i686)  ARCHITECTURE="386"
     ;;
 armhf|armel|armv7l)  ARCHITECTURE="arm"
     ;;
-*) echo "Unable to detect your achitecture" && exit 1
+*) echo 'Unable to detect your achitecture, please open a bug describing \
+         your hardware and the result of the command "arch".' && exit 1
    ;;
 esac
 
