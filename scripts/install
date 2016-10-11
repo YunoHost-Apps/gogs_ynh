@@ -115,6 +115,6 @@ then
 fi
 
 # Reload services
-sudo service rsyslog restart || true
-sudo service nginx reload || true
-sudo service gogs restart || true
+sudo systemctl restart rsyslog.service || true
+sudo systemctl reload nginx.service || true
+sudo systemctl restart gogs.service || true

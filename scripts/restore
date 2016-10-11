@@ -66,6 +66,6 @@ sudo systemctl enable gogs.service
 sudo yunohost service add gogs --log /var/log/gogs.log
 
 # Reload services
-sudo service nginx reload || true
-sudo service rsyslog restart || true
-sudo service gogs start || true
+sudo systemctl restart rsyslog.service || true
+sudo systemctl reload nginx.service || true
+sudo systemctl restart gogs.service || true

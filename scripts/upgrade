@@ -21,8 +21,6 @@ admin=$(ynh_app_setting_get "$app" adminusername)
 key=$(ynh_app_setting_get "$app" secret_key)
 is_public=$(ynh_app_setting_get "$app" is_public)
 
-repo_path=$(ynh_app_setting_get "$app" repopath)
-
 # Stop service
 sudo systemctl stop gogs.service
 
@@ -61,10 +59,6 @@ sudo systemctl enable gogs.service
 # Configure logrotate
 sudo cp ../conf/logrotate /etc/logrotate.d/gogs
 
-# Restore ldap config
-sudo sed -i "s@yuno_admin@$admin@g" ../conf/login_source.sql
-ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ../conf/login_source.sql
-
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@${path%/}@g" ../conf/nginx.conf
 if [ "$path" = "/" ]
@@ -82,6 +76,10 @@ then
 fi
 
 # Reload services
-sudo service rsyslog restart || true
-sudo service nginx reload || true
-sudo service gogs start || true
+sudo systemctl restart rsyslog.service || true
+sudo systemctl reload nginx.service || true
+sudo systemctl restart gogs.service || true
+
+# Restore ldap config
+sudo sed -i "s@yuno_admin@$admin@g" ../conf/login_source.sql
+ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ../conf/login_source.sql
