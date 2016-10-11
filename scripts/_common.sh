@@ -40,6 +40,6 @@ extract_gogs() {
     || ynh_die "Unable to download Gogs tarball"
   unzip -q "$gogs_tarball" -d "$TMPDIR" \
     || ynh_die "Unable to extract Gogs tarball"
-  sudo mv "$TMPDIR"/gogs/* "$DESTDIR"
+  sudo rsync -a "$TMPDIR"/gogs/* "$DESTDIR"
   rm -rf "$gogs_tarball" "$TMPDIR"
 }
