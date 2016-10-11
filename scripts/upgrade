@@ -38,7 +38,7 @@ then
     # move repositories to new dir
     sudo mkdir -p "$REPO_PATH"
     old_repo_path=$(ynh_app_setting_get "$app" repopath)
-    sudo mv "$old_repo_path"/* "$REPO_PATH"
+    sudo mv "${old_repo_path:-/home/yunohost.app/gogs}"/* "$REPO_PATH"
     # cleanup old dir and conf
     sudo unlink /opt/gogs
     sudo rm -rf /etc/gogs /opt/gogs_src
