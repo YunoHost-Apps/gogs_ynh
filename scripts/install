@@ -45,16 +45,16 @@ ynh_app_setting_set $app is_public $is_public
 ynh_app_setting_set $app secret_key $is_public
 
 # Add users
-id -g gogs &>/dev/null || sudo addgroup gogs --system --quiet
-id -u gogs &>/dev/null || sudo adduser gogs --disabled-login \
-    --ingroup gogs --system --quiet --shell /bin/bash
+id -g "$app" &>/dev/null || sudo addgroup "$app" --system --quiet
+id -u "$app" &>/dev/null || sudo adduser "$app" --disabled-login \
+    --ingroup "$app" --system --quiet --shell /bin/bash
 
 # create needed directories
-REPO_PATH=/home/gogs/repositories
-DATA_PATH=/home/gogs/data
+REPO_PATH=/home/"$app"/repositories
+DATA_PATH=/home/"$app"/data
 sudo mkdir -p "$DESTDIR"/custom/conf "$REPO_PATH" "$DATA_PATH"/avatars \
-              "$DATA_PATH"/avatars "$DATA_PATH"/attachments /var/log/gogs
-sudo chown -R gogs:gogs /home/gogs /var/log/gogs
+              "$DATA_PATH"/avatars "$DATA_PATH"/attachments /var/log/"$app"
+sudo chown -R "$app":"$app" /home/"$app" /var/log/"$app"
 
 # Install Gogs
 extract_gogs $DESTDIR
@@ -75,15 +75,15 @@ sudo sed -i "s@yuno_key@$key@g" "$DESTDIR"/custom/conf/app.ini
 sudo sed -i "s@yuno_data_path@$DATA_PATH@g" "$DESTDIR"/custom/conf/app.ini
 
 # Configure logrotate
-sudo cp ../conf/logrotate /etc/logrotate.d/gogs
+sudo cp ../conf/logrotate /etc/logrotate.d/"$app"
 
 # Configure init script
 sudo cp ../conf/gogs.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable gogs.service
+sudo systemctl enable "$app".service
 
 # Start gogs for building mysql tables
-sudo systemctl start gogs.service
+sudo systemctl start "$app".service
 
 # Wait till login_source mysql table is created
 while ! $(ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname"  <<< "SELECT * FROM login_source;" &>/dev/null)
@@ -96,7 +96,7 @@ sudo sed -i "s@yuno_admin@$admin@g" ../conf/login_source.sql
 ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ../conf/login_source.sql
 
 # Add Gogs to YunoHost's monitored services
-sudo yunohost service add gogs --log /var/log/gogs.log
+sudo yunohost service add "$app" --log /var/log/"$app"/"$app".log
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@${path%/}@g" ../conf/nginx.conf
@@ -106,7 +106,7 @@ then
 else
     sed -i "s@COMMENT_IF_ROOT@@g" ../conf/nginx.conf
 fi
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/"$app".conf
 
 # Unprotect root from SSO if public
 if [ "$is_public" = "Yes" ]
@@ -117,4 +117,4 @@ fi
 # Reload services
 sudo systemctl restart rsyslog.service || true
 sudo systemctl reload nginx.service || true
-sudo systemctl restart gogs.service || true
+sudo systemctl restart "$app".service || true

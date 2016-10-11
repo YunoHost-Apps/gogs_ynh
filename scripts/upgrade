@@ -22,12 +22,12 @@ key=$(ynh_app_setting_get "$app" secret_key)
 is_public=$(ynh_app_setting_get "$app" is_public)
 
 # Stop service
-sudo systemctl stop gogs.service
+sudo systemctl stop "$app".service
 
 # set directories variables
 DESTDIR="/opt/$app"
-REPO_PATH=/home/gogs/repositories
-DATA_PATH=/home/gogs/data
+REPO_PATH=/home/"$app"/repositories
+DATA_PATH=/home/"$app"/data
 
 # handle upgrade from old package installation
 # this test that /etc/gogs exist since this was used in the old package
@@ -45,8 +45,8 @@ fi
 
 # create needed directories and give correct acl
 sudo mkdir -p "$DESTDIR"/custom/conf "$REPO_PATH" "$DATA_PATH"/avatars \
-              "$DATA_PATH"/avatars "$DATA_PATH"/attachments /var/log/gogs
-sudo chown -R gogs:gogs /home/gogs /var/log/gogs
+              "$DATA_PATH"/avatars "$DATA_PATH"/attachments /var/log/"$app"
+sudo chown -R "$app":"$app" /home/"$app" /var/log/"$app"
 
 # Install Gogs
 extract_gogs $DESTDIR
@@ -69,10 +69,10 @@ sudo sed -i "s@yuno_data_path@$DATA_PATH@g" "$DESTDIR"/custom/conf/app.ini
 # Configure init script
 sudo cp ../conf/gogs.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable gogs.service
+sudo systemctl enable "$app".service
 
 # Configure logrotate
-sudo cp ../conf/logrotate /etc/logrotate.d/gogs
+sudo cp ../conf/logrotate /etc/logrotate.d/"$app"
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@${path%/}@g" ../conf/nginx.conf
@@ -93,7 +93,7 @@ fi
 # Reload services
 sudo systemctl restart rsyslog.service || true
 sudo systemctl reload nginx.service || true
-sudo systemctl restart gogs.service || true
+sudo systemctl restart "$app".service || true
 
 # Restore ldap config
 sudo sed -i "s@yuno_admin@$admin@g" ../conf/login_source.sql

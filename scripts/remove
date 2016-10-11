@@ -12,7 +12,7 @@ dbuser=$app
 source /usr/share/yunohost/helpers
 
 # Stop gogs
-sudo systemctl stop gogs.service
+sudo systemctl stop "$app".service
 
 # Drop MySQL database and user
 ynh_mysql_drop_db "$dbname" 2>/dev/null || true
@@ -24,19 +24,19 @@ domain=$(ynh_app_setting_get "$app" domain)
 # Delete app directory and configurations
 sudo rm -rf "/opt/${app}"
 [[ -n $domain ]] && sudo rm -f "/etc/nginx/conf.d/${domain}.d/${app}.conf"
-sudo rm -rf /var/log/gogs
-sudo rm -f /etc/logrotate.d/gogs
+sudo rm -rf /var/log/"$app"
+sudo rm -f /etc/logrotate.d/"$app"
 
 # Remove gogs user and data
-sudo userdel -r gogs
+sudo userdel -r "$app"
 
 # Remove init script
-sudo systemctl disable gogs.service
-sudo rm -f /etc/systemd/system/gogs.service
+sudo systemctl disable "$app".service
+sudo rm -f /etc/systemd/system/"$app".service
 sudo systemctl daemon-reload
 
 # Remove monitor
-sudo yunohost service remove gogs
+sudo yunohost service remove "$app"
 
 # Reload services
 sudo systemctl restart rsyslog.service || true

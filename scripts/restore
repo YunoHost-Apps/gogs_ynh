@@ -31,8 +31,9 @@ DESTDIR="/opt/$app"
  You should safely delete it before restoring this app."
 
 # Add users
-id -g gogs &>/dev/null || sudo addgroup gogs --system --quiet
-id -u gogs &>/dev/null || sudo adduser gogs --disabled-login --ingroup gogs --system --quiet --shell /bin/bash
+id -g "$app" &>/dev/null || sudo addgroup "$app" --system --quiet
+id -u "$app" &>/dev/null || sudo adduser "$app" --disabled-login \
+    --ingroup "$app" --system --quiet --shell /bin/bash
 
 # Check configuration files
 nginx_conf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
@@ -51,21 +52,21 @@ ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"
 ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ./db.sql
 
 # Restore directories and permissions
-sudo mkdir -p /var/log/gogs
+sudo mkdir -p /var/log/"$app"
 sudo chown -R root:root "$DESTDIR"
-sudo chown -R gogs:gogs "/home/gogs" "/var/log/gogs"
+sudo chown -R "$app":"$app" "/home/gogs" "/var/log/$app"
 
 # Restore configuration files
 sudo cp -a ./conf/nginx.conf "$nginx_conf"
-sudo cp -a ./conf/logrotate /etc/logrotate.d/gogs
-sudo cp -a ./conf/systemd.service /etc/systemd/system/gogs.service
+sudo cp -a ./conf/logrotate /etc/logrotate.d/"$app"
+sudo cp -a ./conf/systemd.service /etc/systemd/system/"$app".service
 sudo systemctl daemon-reload
-sudo systemctl enable gogs.service
+sudo systemctl enable "$app".service
 
 # Add Gogs to YunoHost's monitored services
-sudo yunohost service add gogs --log /var/log/gogs.log
+sudo yunohost service add "$app" --log /var/log/"$app"/"$app".log
 
 # Reload services
 sudo systemctl restart rsyslog.service || true
 sudo systemctl reload nginx.service || true
-sudo systemctl restart gogs.service || true
+sudo systemctl restart "$app".service || true
