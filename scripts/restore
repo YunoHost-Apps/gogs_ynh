@@ -32,7 +32,7 @@ DESTDIR="/opt/$app"
 
 # Add users
 id -g "$app" &>/dev/null || sudo addgroup "$app" --system --quiet
-id -u "$app" &>/dev/null || sudo adduser "$app" --disabled-login \
+id -u "$app" &>/dev/null || sudo adduser "$app" \
     --ingroup "$app" --system --quiet --shell /bin/bash
 
 # Check configuration files

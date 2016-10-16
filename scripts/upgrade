@@ -100,3 +100,10 @@ sudo systemctl restart "$app".service || true
 # Restore ldap config
 sudo sed -i "s@yuno_admin@$admin@g" ../conf/login_source.sql
 ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ../conf/login_source.sql
+
+# test if user gogs is locked because of an old installation of the package.
+# if it's blocked, unlock it to allow ssh usage with git
+if [[ $(grep "$app" /etc/shadow | cut -d: -f2) == '!' ]]
+then
+  usermod -p '*' "$app"
+fi
