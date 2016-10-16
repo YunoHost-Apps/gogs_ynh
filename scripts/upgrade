@@ -103,7 +103,7 @@ ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ../conf/login_source.sql
 
 # test if user gogs is locked because of an old installation of the package.
 # if it's blocked, unlock it to allow ssh usage with git
-if [[ $(grep "$app" /etc/shadow | cut -d: -f2) == '!' ]]
+if [[ $(sudo grep "$app" /etc/shadow | cut -d: -f2) == '!' ]]
 then
-  usermod -p '*' "$app"
+  sudo usermod -p '*' "$app"
 fi
