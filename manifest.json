@@ -2,11 +2,12 @@
     "package_format": 1,
     "name": "Gogs",
     "id": "gogs",
+    "packaging_format": 1,
     "description": {
         "en": "A self-hosted Git service written in Go",
         "fr": "A self-hosted Git service written in Go"
     },
-    "url": "http://gogs.io/",
+    "url": "http://gogs.io",
     "license": "MIT",
     "version": "0.9.97",
     "maintainer": {
