@@ -43,7 +43,7 @@ Plus, in some cases, gogs will not restart properly during the update, if so, yo
 Sources and issues of the old package can be found [here](https://github.com/YunoHost-Apps/gogs_ynh_old/)
 
 ## Infos
-Gogs v0.9.97
+Gogs v0.9.71
 
 - [YunoHost forum thread](https://forum.yunohost.org/t/gogs-package-an-awesome-github-alternative/1127)
 

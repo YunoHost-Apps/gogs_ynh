@@ -5,7 +5,7 @@
 APPNAME="gogs"
 
 # Gogs version
-VERSION="0.9.97"
+VERSION="0.9.71"
 
 # Detect the system architecture to download the right tarball
 case $(arch) in
