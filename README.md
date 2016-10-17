@@ -47,7 +47,7 @@ Gogs v0.9.71
 
 - [YunoHost forum thread](https://forum.yunohost.org/t/gogs-package-an-awesome-github-alternative/1127)
 
-Architecture: this package is compatible with amd64, i386 and arm, the package will try to detect it with the command arch and fail if it can't find it. If that happen please open an issue describing your hardware and the result of the command `arch`.
+Architecture: this package is compatible with amd64, i386 and arm, the package will try to detect it with the command uname -m and fail if it can't find it. If that happen please open an issue describing your hardware and the result of the command `uname -m`.
 
 ## License
 Gogs is published under MIT License

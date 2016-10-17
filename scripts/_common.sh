@@ -8,17 +8,19 @@ APPNAME="gogs"
 VERSION="0.9.71"
 
 # Detect the system architecture to download the right tarball
-case $(arch) in
-x86_64)  ARCHITECTURE="amd64"
-    ;;
-i386|i686)  ARCHITECTURE="386"
-    ;;
-armhf|armel|armv7l)  ARCHITECTURE="arm"
-    ;;
-*) echo 'Unable to detect your achitecture, please open a bug describing \
-         your hardware and the result of the command "arch".' && exit 1
-   ;;
-esac
+# NOTE: `uname -m` is more accurate and universal than `arch`
+# See https://en.wikipedia.org/wiki/Uname
+if [ -n "$(uname -m | grep 64)" ]; then
+	ARCHITECTURE="amd64"
+elif [ -n "$(uname -m | grep 86)" ]; then
+	ARCHITECTURE="386"
+elif [ -n "$(uname -m | grep arm)" ]; then
+	ARCHITECTURE="arm"
+else
+	echo 'Unable to detect your achitecture, please open a bug describing \
+        your hardware and the result of the command "uname -m".'
+	exit 1
+fi
 
 # Remote URL to fetch Gogs tarball
 GOGS_BINARY_URL="https://github.com/gogits/gogs/releases/download/v${VERSION}/linux_${ARCHITECTURE}.zip"
