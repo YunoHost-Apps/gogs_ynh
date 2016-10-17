@@ -3,7 +3,7 @@
 set -eu
 
 # Set app specific variables
-app="gogs"
+app=${APPNAME:-gogs}
 dbname=$app
 dbuser=$app
 

@@ -6,7 +6,7 @@ set -eu
 source ./_common.sh
 
 # Set app specific variables
-app=$APPNAME
+app=${APPNAME:-gogs}
 dbname=$app
 dbuser=$app
 

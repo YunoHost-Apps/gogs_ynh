@@ -12,7 +12,7 @@ is_public=$4
 source ./_common.sh
 
 # Set app specific variables
-app=$APPNAME
+app=${APPNAME:-gogs}
 dbname=$app
 dbuser=$app
 
