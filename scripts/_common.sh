@@ -43,5 +43,5 @@ extract_gogs() {
   unzip -q "$gogs_tarball" -d "$TMPDIR" \
     || ynh_die "Unable to extract Gogs tarball"
   sudo rsync -a "$TMPDIR"/gogs/* "$DESTDIR"
-  rm -rf "$gogs_tarball" "$TMPDIR"
+  rm -rf "$gogs_tarball" "${TMPDIR:-/tmp/fakefile}"
 }
