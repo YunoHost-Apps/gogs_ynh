@@ -5,7 +5,7 @@
 APPNAME="gogs"
 
 # Gogs version
-VERSION="0.9.71"
+VERSION="0.9.141"
 
 # Detect the system architecture to download the right tarball
 # NOTE: `uname -m` is more accurate and universal than `arch`
