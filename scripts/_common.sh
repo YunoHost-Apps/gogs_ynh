@@ -15,7 +15,7 @@ if [ -n "$(uname -m | grep 64)" ]; then
 elif [ -n "$(uname -m | grep 86)" ]; then
 	ARCHITECTURE="386"
 elif [ -n "$(uname -m | grep arm)" ]; then
-	ARCHITECTURE="arm"
+	ARCHITECTURE="armv6"
 else
 	echo 'Unable to detect your achitecture, please open a bug describing \
         your hardware and the result of the command "uname -m".'
