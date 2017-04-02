@@ -9,7 +9,7 @@
     },
     "url": "http://gogs.io",
     "license": "MIT",
-    "version": "0.9.71",
+    "version": "0.10.18",
     "maintainer": {
         "name": "tostaki",
         "email": "maxime@max.privy.place"
