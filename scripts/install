@@ -3,10 +3,10 @@
 set -euo pipefail
 
 # Retrieve arguments
-domain=$1
-path=$2
-admin=$3
-is_public=$4
+domain=$YNH_APP_ARG_DOMAIN
+path=$YNH_APP_ARG_PATH
+admin=$YNH_APP_ARG_ADMIN
+is_public=$YNH_APP_ARG_PUBLIC_SITE
 
 # Load common variables
 source ./_common.sh
