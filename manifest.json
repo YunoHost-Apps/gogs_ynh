@@ -4,8 +4,8 @@
     "id": "gogs",
     "packaging_format": 1,
     "description": {
-        "en": "A self-hosted Git service written in Go",
-        "fr": "A self-hosted Git service written in Go"
+        "en": "Lightweight git forge",
+        "fr": "Forge git légère"
     },
     "url": "http://gogs.io",
     "license": "MIT",

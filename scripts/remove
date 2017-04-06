@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit and treat unset variables as an error
+set -u
+
 # Load common variables and helpers
 source ./_common.sh
 
