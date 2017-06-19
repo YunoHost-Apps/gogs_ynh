@@ -110,7 +110,7 @@ sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/"$app".conf
 
 # Create uploads folder and permissions
 sudo mkdir /opt/gogs/data
-sudo chown -R /opt/gogs/data
+sudo chown -R gogs /opt/gogs/data
 
 # Unprotect root from SSO if public
 if [ "$is_public" = "Yes" ]
