@@ -19,6 +19,12 @@ dbuser=$app
 # Source app helpers
 source /usr/share/yunohost/helpers
 
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THIS ARGS
+#=================================================
+
+path=$(ynh_normalize_url_path $path)	# Vérifie et corrige la syntaxe du path.
+
 # TODO: Check domain/path availability with app helper
 sudo yunohost app checkurl "${domain}${path}" -a "$app" \
   || ynh_die "The path ${domain}${path} is not available for app installation."
