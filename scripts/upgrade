@@ -1,33 +1,46 @@
 #!/bin/bash
 
-set -euo pipefail
+# IMPORT GENERIC HELPERS
+source /usr/share/yunohost/helpers
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 # Load common variables and helpers
+source ./experimental_helper.sh
 source ./_common.sh
-
-# Set app specific variables
-app=${APPNAME:-gogs}
-dbname=$app
-dbuser=$app
-
-# Source app helpers
-source /usr/share/yunohost/helpers
 
 # Retrieve app settings
 domain=$(ynh_app_setting_get "$app" domain)
-path=$(ynh_app_setting_get "$app" path)
+path_url=$(ynh_app_setting_get "$app" path)
 dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
 admin=$(ynh_app_setting_get "$app" adminusername)
 key=$(ynh_app_setting_get "$app" secret_key)
 is_public=$(ynh_app_setting_get "$app" is_public)
 
-# Stop service
-sudo systemctl stop "$app".service
+# Backup the current version of the app
+if [[ $(ynh_app_setting_get $app disable_backup_before_upgrade) != '1' ]]
+then
+    ynh_backup_before_upgrade
+    ynh_clean_setup () {
+        ynh_restore_upgradebackup
+    }
+fi
 
-# set directories variables
-DESTDIR="/opt/$app"
-REPO_PATH=/home/"$app"/repositories
-DATA_PATH=/home/"$app"/data
+# Update settings is_public to new standard
+if [ "$is_public" = "Yes" ]; then
+	ynh_app_setting_set $app is_public 1	# Fixe is_public en booléen
+	is_public=1
+elif [ "$is_public" = "No" ]; then
+	ynh_app_setting_set $app is_public 0
+	is_public=0
+fi
+
+# Stop service
+systemctl stop "$app".service
+
+# create needed directories if not already created
+create_dir
 
 # handle upgrade from old package installation
 # this test that /etc/gogs exist since this was used in the old package
@@ -36,74 +49,42 @@ DATA_PATH=/home/"$app"/data
 if [ -d "/etc/gogs" ]
 then
     # move repositories to new dir
-    sudo mkdir -p "$REPO_PATH"
     old_repo_path=$(ynh_app_setting_get "$app" repopath)
-    sudo mv "${old_repo_path:-/home/yunohost.app/gogs}"/* "$REPO_PATH"
+    mv "${old_repo_path:-/home/yunohost.app/gogs}"/* "$REPO_PATH"
     # cleanup old dir and conf
-    sudo unlink /opt/gogs
-    sudo rm -rf /etc/gogs /opt/gogs_src
+    unlink /opt/gogs
+    ynh_secure_remove /etc/gogs
+    ynh_secure_remove /opt/gogs_src
 fi
 # end of old package upgrade
 
-# create needed directories and give correct acl
-sudo mkdir -p "$DESTDIR"/custom/conf "$REPO_PATH" "$DATA_PATH"/avatars \
-              "$DATA_PATH"/avatars "$DATA_PATH"/attachments /var/log/"$app"
-sudo chown -R "$app":"$app" /home/"$app" /var/log/"$app"
-
 # Install Gogs
-extract_gogs $DESTDIR
+ynh_setup_source $final_path $architecture
 
 # Configure gogs with app.ini file
-sudo cp ../conf/app.ini "$DESTDIR"/custom/conf
-sudo sed -i "s@yuno_repo_path@"$REPO_PATH"@g" "$DESTDIR"/custom/conf/app.ini
-if [ "$path" = "/" ]
-then
-    sudo sed -i "s@yuno_url@$domain@g" "$DESTDIR"/custom/conf/app.ini
-else
-    sudo sed -i "s@yuno_url@$domain${path%/}@g" "$DESTDIR"/custom/conf/app.ini
-fi
-sudo sed -i "s@yuno_dbpdw@$dbpass@g" "$DESTDIR"/custom/conf/app.ini
-sudo sed -i "s@yuno_dbuser@$dbuser@g" "$DESTDIR"/custom/conf/app.ini
-sudo sed -i "s@yuno_domain@$domain@g" "$DESTDIR"/custom/conf/app.ini
-sudo sed -i "s@yuno_key@$key@g" "$DESTDIR"/custom/conf/app.ini
-sudo sed -i "s@yuno_data_path@$DATA_PATH@g" "$DESTDIR"/custom/conf/app.ini
+config_gogs
 
 # Configure init script
-sudo cp ../conf/gogs.service /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable "$app".service
-
-# Configure logrotate
-sudo cp ../conf/logrotate /etc/logrotate.d/"$app"
+ynh_add_systemd_config
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
-sed -i "s@PATHTOCHANGE@${path%/}@g" ../conf/nginx.conf
-if [ "$path" = "/" ]
-then
-    sed -i "s@COMMENT_IF_ROOT@#@g" ../conf/nginx.conf
-else
-    sed -i "s@COMMENT_IF_ROOT@@g" ../conf/nginx.conf
-fi
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+config_nginx
 
 # Unprotect root from SSO if public
-if [ "$is_public" = "Yes" ]
+if [ "$is_public" ]
 then
     ynh_app_setting_set $app unprotected_uris "/"
 fi
 
-# Reload services
-sudo systemctl restart rsyslog.service || true
-sudo systemctl reload nginx.service || true
-sudo systemctl restart "$app".service || true
-
-# Restore ldap config
-sudo sed -i "s@yuno_admin@$admin@g" ../conf/login_source.sql
-ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ../conf/login_source.sql
+# Set permissions
+set_permission
 
 # test if user gogs is locked because of an old installation of the package.
 # if it's blocked, unlock it to allow ssh usage with git
-if [[ $(sudo grep "$app" /etc/shadow | cut -d: -f2) == '!' ]]
+if [[ $(grep "$app" /etc/shadow | cut -d: -f2) == '!' ]]
 then
-  sudo usermod -p '*' "$app"
+    usermod -p '*' "$app"
 fi
+
+# Reload services
+systemctl restart "$app".service

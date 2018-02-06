@@ -9,7 +9,7 @@
     },
     "url": "http://gogs.io",
     "license": "MIT",
-    "version": "0.11.19",
+    "version": "0.11.34~ynh1",
     "maintainer": {
         "name": "tostaki",
         "email": "maxime@max.privy.place"
@@ -54,12 +54,12 @@
             },
             {
                 "name": "public_site",
+                "type": "boolean",
                 "ask": {
                     "en": "Is it a public site ?",
                     "fr": "Est-ce un site public ?"
                 },
-                "choices": ["Yes", "No"],
-                "default": "Yes"
+                "default": true
             }
         ]
     }

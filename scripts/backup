@@ -1,33 +1,28 @@
 #!/bin/bash
 
-set -euo pipefail
-
-# Set app specific variables
-app=${APPNAME:-gogs}
-dbname=$app
-dbuser=$app
-
-# Source app helpers
+# IMPORT GENERIC HELPERS
 source /usr/share/yunohost/helpers
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+# Load common variables and helpers
+source ./experimental_helper.sh
+source ./_common.sh
 
 # Retrieve app settings
 domain=$(ynh_app_setting_get "$app" domain)
-dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
-repo_path=$(ynh_app_setting_get "$app" repopath)
 
 # Copy the app source files
-DESTDIR="/opt/$app"
-ynh_backup "$DESTDIR" "www"
+ynh_backup "$DESTDIR"
 
 # Copy the data files
 DATADIR="/home/$app"
-ynh_backup "$DATADIR" "data"
+ynh_backup "$DATADIR"
 
 # Copy the conf files
-mkdir ./conf
-ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf" "conf/nginx.conf"
-ynh_backup "/etc/logrotate.d/${app}" "conf/logrotate"
-ynh_backup "/etc/systemd/system/${app}.service" "conf/systemd.service"
+ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+ynh_backup "/etc/systemd/system/${app}.service"
 
 # Dump the database
-mysqldump -u "$dbuser" -p"$dbpass" --no-create-db "$dbname" > ./db.sql
+ynh_mysql_dump_db "$dbname" > ./db.sql

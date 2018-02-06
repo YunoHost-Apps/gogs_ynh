@@ -1,46 +1,42 @@
 #!/bin/bash
 
-# Exit and treat unset variables as an error
-set -u
+# IMPORT GENERIC HELPERS
+source /usr/share/yunohost/helpers
 
 # Load common variables and helpers
+source ./experimental_helper.sh
 source ./_common.sh
 
 # Set app specific variables
-app=${APPNAME:-gogs}
+app=$YNH_APP_INSTANCE_NAME
 dbname=$app
 dbuser=$app
 
-# Source app helpers
-source /usr/share/yunohost/helpers
-
 # Stop gogs
-sudo systemctl stop "$app".service
+systemctl stop "$app".service
 
 # Drop MySQL database and user
-ynh_mysql_drop_db "$dbname" 2>/dev/null || true
-ynh_mysql_drop_user "$dbuser" 2>/dev/null || true
+ynh_mysql_drop_db "$dbname" 2>/dev/null
+ynh_mysql_drop_user "$dbuser" 2>/dev/null
 
 # Retrieve domain from app settings
 domain=$(ynh_app_setting_get "$app" domain)
 
 # Delete app directory and configurations
-sudo rm -rf "/opt/${app}"
-[[ -n $domain ]] && sudo rm -f "/etc/nginx/conf.d/${domain}.d/${app}.conf"
-sudo rm -rf /var/log/"$app"
-sudo rm -f /etc/logrotate.d/"$app"
+ynh_secure_remove "/opt/${app}"
+ynh_secure_remove "/var/log/$app"
+
+# Remove the app-specific logrotate config
+ynh_remove_logrotate
+
+# Remove nginx config
+ynh_remove_nginx_config
 
 # Remove gogs user and data
-sudo userdel -r "$app"
+ynh_system_user_delete $app
 
 # Remove init script
-sudo systemctl disable "$app".service
-sudo rm -f /etc/systemd/system/"$app".service
-sudo systemctl daemon-reload
+ynh_remove_systemd_config
 
 # Remove monitor
-sudo yunohost service remove "$app"
-
-# Reload services
-sudo systemctl restart rsyslog.service || true
-sudo systemctl reload nginx.service || true
+yunohost service remove "$app"
