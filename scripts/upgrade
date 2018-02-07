@@ -17,6 +17,7 @@ dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
 admin=$(ynh_app_setting_get "$app" adminusername)
 key=$(ynh_app_setting_get "$app" secret_key)
 is_public=$(ynh_app_setting_get "$app" is_public)
+port=$(ynh_app_setting_get "$app" web_port)
 
 # Backup the current version of the app
 if [[ $(ynh_app_setting_get $app disable_backup_before_upgrade) != '1' ]]
@@ -38,6 +39,12 @@ fi
 
 # Stop service
 systemctl stop "$app".service
+
+if [[ $port == "" ]]
+then
+    port=$(ynh_find_port 6000)
+    ynh_app_setting_set $app web_port $port
+fi
 
 # create needed directories if not already created
 create_dir

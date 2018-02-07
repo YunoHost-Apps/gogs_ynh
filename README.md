@@ -78,3 +78,10 @@ sudo yunohost app install -l Gogs /home/admin/gogs_ynh
 sudo yunohost app upgrade -f /home/admin/gogs_ynh gogs
 
 ```
+
+## Todo
+
+- check migration
+- change-url
+
+

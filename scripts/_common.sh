@@ -40,19 +40,26 @@ config_nginx() {
 }
 
 config_gogs() {
+    ynh_backup_if_checksum_is_different "$final_path/custom/conf/app.ini"
+
     cp ../conf/app.ini "$final_path"/custom/conf
-    ynh_replace_string "yuno_repo_path" "$REPO_PATH" "$final_path"/custom/conf/app.ini
+
     if [ "$path_url" = "/" ]
     then
-        ynh_replace_string "yuno_url" "$domain" "$final_path"/custom/conf/app.ini
+        ynh_replace_string "__URL__" "$domain" "$final_path/custom/conf/app.ini"
     else
-        ynh_replace_string "yuno_url" "$domain${path_url%/}" "$final_path"/custom/conf/app.ini
+        ynh_replace_string "__URL__" "$domain${path_url%/}" "$final_path/custom/conf/app.ini"
     fi
-    ynh_replace_string "yuno_dbpdw" "$dbpass" "$final_path"/custom/conf/app.ini
-    ynh_replace_string "yuno_dbuser" "$dbuser" "$final_path"/custom/conf/app.ini
-    ynh_replace_string "yuno_domain" "$domain" "$final_path"/custom/conf/app.ini
-    ynh_replace_string "yuno_key" "$key" "$final_path"/custom/conf/app.ini
-    ynh_replace_string "yuno_data_path" "$DATA_PATH" "$final_path"/custom/conf/app.ini
+
+    ynh_replace_string "__REPOS_PATH__" "$REPO_PATH" "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__DB_PASSWORD__" "$dbpass" "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__DB_USER__" "$dbuser" "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__DOMAIN__" "$domain" "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__KEY__" "$key" "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__DATA_PATH__" "$DATA_PATH" "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__PORT__" $port "$final_path/custom/conf/app.ini"
+
+    ynh_store_file_checksum "$final_path/custom/conf/app.ini"
 }
 
 set_permission() {
@@ -63,28 +70,3 @@ set_permission() {
     chmod u=rwX,g=rX,o= "/home/$app"
     chmod u=rwX,g=rX,o= "/var/log/$app"
 }
-
-# Remote URL to fetch Gogs tarball
-# GOGS_BINARY_URL="https://github.com/gogits/gogs/releases/download/v${VERSION}/${architecture}.zip"
-
-#
-# Common helpers
-#
-
-# Download and extract Gogs binary to the given directory
-# # usage: extract_gogs DESTDIR
-# extract_gogs() {
-# #   local DESTDIR=$1
-# #   local TMPDIR=$(mktemp -d)
-# #
-# #   # retrieve and extract Gogs tarball
-# #   gogs_tarball="/tmp/gogs.zip"
-# #   rm -f "$gogs_tarball"
-# #   wget -q -O "$gogs_tarball" "$GOGS_BINARY_URL" \
-# #     || ynh_die "Unable to download Gogs tarball"
-# #   unzip -q "$gogs_tarball" -d "$TMPDIR" \
-# #     || ynh_die "Unable to extract Gogs tarball"
-# #   sudo rsync -a "$TMPDIR"/gogs/* "$DESTDIR"
-# #   rm -rf "$gogs_tarball" "${TMPDIR:-/tmp/fakefile}"
-# 
-# }
