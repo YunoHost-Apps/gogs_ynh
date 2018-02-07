@@ -53,7 +53,7 @@
                 "example": "johndoe"
             },
             {
-                "name": "public_site",
+                "name": "is_public",
                 "type": "boolean",
                 "ask": {
                     "en": "Is it a public site ?",

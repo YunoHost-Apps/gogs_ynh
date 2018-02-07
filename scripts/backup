@@ -7,17 +7,16 @@ source /usr/share/yunohost/helpers
 ynh_abort_if_errors
 
 # Load common variables and helpers
-source ./experimental_helper.sh
-source ./_common.sh
+source ../settings/scripts/experimental_helper.sh
+source ../settings/scripts/_common.sh
 
 # Retrieve app settings
 domain=$(ynh_app_setting_get "$app" domain)
 
 # Copy the app source files
-ynh_backup "$DESTDIR"
+ynh_backup "$final_path"
 
 # Copy the data files
-DATADIR="/home/$app"
 ynh_backup "$DATADIR"
 
 # Copy the conf files

@@ -5,8 +5,9 @@ app=$YNH_APP_INSTANCE_NAME
 final_path="/opt/$app"
 dbname=$app
 dbuser=$app
-REPO_PATH="/home/$app/repositories"
-DATA_PATH="/home/$app/data"
+DATADIR="/home/$app"
+REPO_PATH="$DATADIR/repositories"
+DATA_PATH="$DATADIR/data"
 
 # Detect the system architecture to download the right tarball
 # NOTE: `uname -m` is more accurate and universal than `arch`

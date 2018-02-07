@@ -7,8 +7,8 @@ source /usr/share/yunohost/helpers
 ynh_abort_if_errors
 
 # Load common variables and helpers
-source ./experimental_helper.sh
-source ./_common.sh
+source ../settings/scripts/experimental_helper.sh
+source ../settings/scripts/_common.sh
 
 # Set app specific variables
 app=${APPNAME:-gogs}
