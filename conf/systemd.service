@@ -13,12 +13,12 @@ After=slapd.service
 #LimitMEMLOCK=infinity
 #LimitNOFILE=65535
 Type=simple
-User=gogs
-Group=gogs
-WorkingDirectory=/home/gogs
-ExecStart=/opt/gogs/gogs web
+User=__APP__
+Group=__APP__
+WorkingDirectory=/home/__APP__
+ExecStart=/opt/__APP__/gogs web
 Restart=always
-Environment=USER=gogs HOME=/home/gogs
+Environment=USER=__APP__ HOME=/home/__APP__
 
 [Install]
 WantedBy=multi-user.target

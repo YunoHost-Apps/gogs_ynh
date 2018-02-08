@@ -45,15 +45,8 @@ ynh_app_setting_set $app web_port $port
 # Add users
 ynh_system_user_create $app
 
-# id -g "$app" &>/dev/null || sudo addgroup "$app" --system --quiet
-# id -u "$app" &>/dev/null || sudo adduser "$app" \
-#     --ingroup "$app" --system --quiet --shell /bin/bash
-
 # create needed directories
 create_dir
-
-# Create uploads folder and permissions
-mkdir /opt/$app/data
 
 # Install Gogs
 ynh_setup_source $final_path $architecture
@@ -80,11 +73,12 @@ do
 done
 
 # Add ldap config
-ynh_replace_string "yuno_admin" "$admin" ../conf/login_source.sql
+ynh_replace_string "__ADMIN__" "$admin" ../conf/login_source.sql$
+ynh_replace_string "__APP__" "$app" ../conf/login_source.sql
 ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ../conf/login_source.sql
 
 # Unprotect root from SSO if public
-if [ ! "$is_public" ]
+if [ "$is_public" = '1' ]
 then
     ynh_app_setting_set $app unprotected_uris "/"
 fi

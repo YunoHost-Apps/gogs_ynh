@@ -10,11 +10,6 @@ ynh_abort_if_errors
 source ../settings/scripts/experimental_helper.sh
 source ../settings/scripts/_common.sh
 
-# Set app specific variables
-app=${APPNAME:-gogs}
-dbname=$app
-dbuser=$app
-
 # Retrieve old app settings
 domain=$(ynh_app_setting_get "$app" domain)
 path_url=$(ynh_app_setting_get "$app" path)

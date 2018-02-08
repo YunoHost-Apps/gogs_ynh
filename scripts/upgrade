@@ -12,7 +12,7 @@ source ./_common.sh
 
 # Retrieve app settings
 domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_app_setting_get "$app" path)
+path_url=$(ynh_normalize_url_path $(ynh_app_setting_get "$app" path))
 dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
 admin=$(ynh_app_setting_get "$app" adminusername)
 key=$(ynh_app_setting_get "$app" secret_key)
@@ -20,13 +20,10 @@ is_public=$(ynh_app_setting_get "$app" is_public)
 port=$(ynh_app_setting_get "$app" web_port)
 
 # Backup the current version of the app
-if [[ $(ynh_app_setting_get $app disable_backup_before_upgrade) != '1' ]]
-then
-    ynh_backup_before_upgrade
-    ynh_clean_setup () {
-        ynh_restore_upgradebackup
-    }
-fi
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+    ynh_restore_upgradebackup
+}
 
 # Update settings is_public to new standard
 if [ "$is_public" = "Yes" ]; then
@@ -78,7 +75,7 @@ ynh_add_systemd_config
 config_nginx
 
 # Unprotect root from SSO if public
-if [ "$is_public" ]
+if [ ! "$is_public" ]
 then
     ynh_app_setting_set $app unprotected_uris "/"
 fi

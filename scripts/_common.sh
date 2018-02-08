@@ -2,9 +2,9 @@
 # Common variables
 #
 app=$YNH_APP_INSTANCE_NAME
-final_path="/opt/$app"
 dbname=$app
 dbuser=$app
+final_path="/opt/$app"
 DATADIR="/home/$app"
 REPO_PATH="$DATADIR/repositories"
 DATA_PATH="$DATADIR/data"
@@ -24,6 +24,7 @@ else
 fi
 
 create_dir() {
+    mkdir -p "$final_path/data"
     mkdir -p "$final_path/custom/conf"
     mkdir -p "$REPO_PATH"
     mkdir -p "$DATA_PATH/avatars"
@@ -58,6 +59,7 @@ config_gogs() {
     ynh_replace_string "__KEY__" "$key" "$final_path/custom/conf/app.ini"
     ynh_replace_string "__DATA_PATH__" "$DATA_PATH" "$final_path/custom/conf/app.ini"
     ynh_replace_string "__PORT__" $port "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__APP__" $app "$final_path/custom/conf/app.ini"
 
     ynh_store_file_checksum "$final_path/custom/conf/app.ini"
 }
