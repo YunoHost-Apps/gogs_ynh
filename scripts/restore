@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#=================================================
+# GENERIC START
+#=================================================
+
 # IMPORT GENERIC HELPERS
 source /usr/share/yunohost/helpers
 
@@ -26,6 +30,10 @@ ynh_user_exists "$admin" \
 # Check Final Path availability
 test ! -e "$final_path" || ynh_die "This path already contains a folder"
 
+#=================================================
+# STANDARD RESTORATION STEPS
+#=================================================
+
 # Add users
 ynh_system_user_create $app
 
@@ -36,9 +44,13 @@ ynh_restore
 ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"
 ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ./db.sql
 
-# Restore configuration files
+# Restore systemd files
 systemctl daemon-reload
 systemctl enable "$app".service
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
 
 # Set permissions
 set_permission
