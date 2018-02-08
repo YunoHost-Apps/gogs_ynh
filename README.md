@@ -82,9 +82,6 @@ sudo yunohost app upgrade -f /home/admin/gogs_ynh gogs
 ## Todo
 
 - Big comment
-- Restore cassé
 - Test multi instance
-- check migration
-- change-url
 
 

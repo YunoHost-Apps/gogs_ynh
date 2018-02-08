@@ -43,22 +43,25 @@ then
     ynh_app_setting_set $app web_port $port
 fi
 
-# create needed directories if not already created
-create_dir
-
 # handle upgrade from old package installation
 # this test that /etc/gogs exist since this was used in the old package
 # but not in the new
 # this code will be removed in the future
 if [ -d "/etc/gogs" ]
 then
+    # create needed directories if not already created
+    create_dir
+
     # move repositories to new dir
     old_repo_path=$(ynh_app_setting_get "$app" repopath)
-    mv "${old_repo_path:-/home/yunohost.app/gogs}"/* "$REPO_PATH"
+    mv "${old_repo_path:-/home/yunohost.app/gogs}"/* "$REPO_PATH" || true # Avoid if the directory is empty
     # cleanup old dir and conf
-    unlink /opt/gogs
+    ynh_secure_remove /opt/gogs
     ynh_secure_remove /etc/gogs
     ynh_secure_remove /opt/gogs_src
+    
+    # create needed directories if not already created
+    create_dir
 fi
 # end of old package upgrade
 
@@ -94,7 +97,5 @@ then
 fi
 
 # Reload services
-systemctl restart "$app".service
-
-
-sleep 10
+ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+sleep 1

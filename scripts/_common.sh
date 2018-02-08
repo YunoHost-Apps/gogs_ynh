@@ -43,7 +43,7 @@ config_nginx() {
 config_gogs() {
     ynh_backup_if_checksum_is_different "$final_path/custom/conf/app.ini"
 
-    cp ../conf/app.ini "$final_path"/custom/conf
+    cp ../conf/app.ini "$final_path/custom/conf"
 
     if [ "$path_url" = "/" ]
     then
