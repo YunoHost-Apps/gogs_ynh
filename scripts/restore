@@ -40,6 +40,9 @@ ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ./db.sql
 systemctl daemon-reload
 systemctl enable "$app".service
 
+# Set permissions
+set_permission
+
 # Configure logrotate
 ynh_use_logrotate "/var/log/$app"
 
@@ -48,4 +51,4 @@ yunohost service add "$app" --log /var/log/"$app"/"$app".log
 
 # Reload services
 systemctl reload nginx.service
-systemctl restart "$app".service
+systemctl start "$app".service

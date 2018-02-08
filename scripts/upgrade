@@ -62,6 +62,9 @@ then
 fi
 # end of old package upgrade
 
+# Clean template to fix issue : https://github.com/gogits/gogs/issues/4585
+ynh_secure_remove "/opt/gogs/templates"
+
 # Install Gogs
 ynh_setup_source $final_path $architecture
 
@@ -92,3 +95,6 @@ fi
 
 # Reload services
 systemctl restart "$app".service
+
+
+sleep 10

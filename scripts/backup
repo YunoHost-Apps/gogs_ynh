@@ -23,5 +23,8 @@ ynh_backup "$DATADIR"
 ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
 ynh_backup "/etc/systemd/system/${app}.service"
 
+# Backup logs
+ynh_backup "/var/log/$app"
+
 # Dump the database
 ynh_mysql_dump_db "$dbname" > ./db.sql
