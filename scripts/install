@@ -104,4 +104,5 @@ yunohost service add "$app" --log "/var/log/$app/$app.log"
 ynh_use_logrotate "/var/log/$app"
 
 # Reload services
-systemctl restart "$app".service
+ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+sleep 1

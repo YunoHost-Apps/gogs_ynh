@@ -73,4 +73,5 @@ config_nginx
 config_gogs
 
 # RELOAD services
-systemctl restart "$app".service
+ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+sleep 1
