@@ -31,12 +31,13 @@ ynh_check_starting () {
 	}
 
 	echo "Starting of $service_name" >&2
-	systemctl restart $service_name
+	systemctl stop $service_name
 	local templog="$(mktemp)"
 	# Following the starting of the app in its log
-	tail -F -n1 "$app_log" > "$templog" &
+	tail -F -n0 "$app_log" > "$templog" &
 	# Get the PID of the tail command
 	local pid_tail=$!
+	systemctl start $service_name
 
 	local i=0
 	for i in `seq 1 $timeout`
