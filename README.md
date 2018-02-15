@@ -3,6 +3,10 @@
 Gogs is a self-hosted Git service written in Go. Alternative to Github.
 - [Gogs website](http://gogs.io)
 
+[![Integration level](https://dash.yunohost.org/integration/gogs.svg)](https://ci-apps.yunohost.org/jenkins/job/gogs%20%28Community%29/lastBuild/consoleFull) 
+
+[![Install Gogs with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=gogs)
+
 ## Requirements
 A functional instance of [YunoHost](https://yunohost.org)
 
@@ -44,11 +48,15 @@ Also, in some cases, Gogs will not restart properly during the update. If so, yo
 Sources and issues of the old package can be found [here](https://github.com/YunoHost-Apps/gogs_ynh_old/)
 
 ## Info
-Gogs v0.11
+Gogs v0.11.33
 
 - [YunoHost forum thread](https://forum.yunohost.org/t/gogs-package-an-awesome-github-alternative/1127)
 
 Architecture: this package is compatible with amd64, i386 and arm. The package will try to detect it with the command uname -m and fail if it can't detect the architecture. If that happens please open an issue describing your hardware and the result of the command `uname -m`.
+
+## Issue
+
+Any issue is welcome here : https://github.com/YunoHost-Apps/gogs_ynh/issues
 
 ## License
 Gogs is published under the MIT License:
