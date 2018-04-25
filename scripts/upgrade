@@ -103,6 +103,9 @@ config_nginx
 # GENERIC FINALIZATION
 #=================================================
 
+# Unprotect root from SSO if public
+set_access_settings
+
 # Set permissions
 set_permission
 
