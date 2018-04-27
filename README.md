@@ -48,11 +48,14 @@ Also, in some cases, Gogs will not restart properly during the update. If so, yo
 Sources and issues of the old package can be found [here](https://github.com/YunoHost-Apps/gogs_ynh_old/)
 
 ## Info
-Gogs v0.11.33
+Gogs v0.11.43
 
 - [YunoHost forum thread](https://forum.yunohost.org/t/gogs-package-an-awesome-github-alternative/1127)
 
 Architecture: this package is compatible with amd64, i386 and arm. The package will try to detect it with the command uname -m and fail if it can't detect the architecture. If that happens please open an issue describing your hardware and the result of the command `uname -m`.
+
+## Private Mode
+Actually it's possible to access to the git repositories by the `git` command over http also in private mode installation. It's important to know that in this mode the repository could be ALSO getted if you don't set the repository as private in the repos settings.
 
 ## Issue
 
