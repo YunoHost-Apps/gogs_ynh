@@ -11,6 +11,10 @@
     "license": "MIT",
     "version": "0.11.33~ynh1",
     "maintainer": {
+        "name": "Josué Tille",
+        "email": "josue@tille.ch"
+    },
+    "previous_maintainers": {
         "name": "tostaki",
         "email": "maxime@max.privy.place"
     },
