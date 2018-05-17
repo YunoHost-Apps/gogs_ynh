@@ -66,6 +66,13 @@ config_gogs() {
     ynh_replace_string "__PORT__" $port "$final_path/custom/conf/app.ini"
     ynh_replace_string "__APP__" $app "$final_path/custom/conf/app.ini"
 
+    if [[ "$is_public" = '1' ]]
+    then
+        ynh_replace_string "__PRIVATE_MODE__" "false" "$final_path/custom/conf/app.ini"
+    else
+        ynh_replace_string "__PRIVATE_MODE__" "true" "$final_path/custom/conf/app.ini"
+    fi
+
     ynh_store_file_checksum "$final_path/custom/conf/app.ini"
 }
 
