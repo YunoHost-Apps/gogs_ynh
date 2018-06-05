@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/gogits/gogs/releases/download/v0.11.43/raspi2_armv6.zip
-SOURCE_SUM=5c7dfbe624f76446e8f548d25abc4ec37a54120c65454ef2deaca9b0676cce10
+SOURCE_URL=https://github.com/gogits/gogs/releases/download/v0.11.53/raspi2_armv6.zip
+SOURCE_SUM=dfe979a334f1348b2f4079e1e262278e78ebb15f8cf1da73cc547d9ae85448c7
 # (Optional) Program to check the integrity (sha256sum, md5sum...)
 # default: sha256
 SOURCE_SUM_PRG=sha256sum
