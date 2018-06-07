@@ -30,8 +30,7 @@ fi
 
 create_dir() {
     mkdir -p "$final_path/data"
-    mkdir -p "$final_path/custom/conf"
-    mkdir -p "$REPO_PATH"
+    mkdir -p "$final_path/custom/conf/auth.d"
     mkdir -p "$DATA_PATH/avatars"
     mkdir -p "$DATA_PATH/attachments"
     mkdir -p "/var/log/$app"
@@ -47,8 +46,10 @@ config_nginx() {
 
 config_gogs() {
     ynh_backup_if_checksum_is_different "$final_path/custom/conf/app.ini"
+    ynh_backup_if_checksum_is_different "$final_path/custom/conf/auth.d/ldap.conf"
 
     cp ../conf/app.ini "$final_path/custom/conf"
+    cp ../conf/ldap.conf "$final_path/custom/conf/auth.d/ldap.conf"
 
     if [ "$path_url" = "/" ]
     then
@@ -73,7 +74,10 @@ config_gogs() {
         ynh_replace_string "__PRIVATE_MODE__" "true" "$final_path/custom/conf/app.ini"
     fi
 
+    ynh_replace_string "__ADMIN__" "$admin" "$final_path/custom/conf/auth.d/ldap.conf"
+
     ynh_store_file_checksum "$final_path/custom/conf/app.ini"
+    ynh_store_file_checksum "$final_path/custom/conf/auth.d/ldap.conf"
 }
 
 set_permission() {

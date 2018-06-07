@@ -73,26 +73,12 @@ ynh_add_systemd_config
 # Modify Nginx configuration file and copy it to Nginx conf directory
 config_nginx
 
-# Start gogs for building mysql tables
-systemctl start "$app".service
-
-# Set permissions
-set_permission
-
-# Wait till login_source mysql table is created
-while ! $(ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname"  <<< "SELECT * FROM login_source;" &>/dev/null)
-do
-    sleep 2
-done
-
-# Add ldap config
-ynh_replace_string "__ADMIN__" "$admin" ../conf/login_source.sql
-ynh_replace_string "__APP__" "$app" ../conf/login_source.sql
-ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ../conf/login_source.sql
-
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
+
+# Set permissions
+set_permission
 
 # Unprotect root from SSO if public
 set_access_settings
