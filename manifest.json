@@ -9,7 +9,7 @@
     },
     "url": "http://gogs.io",
     "license": "MIT",
-    "version": "0.11.53~ynh1",
+    "version": "0.11.66~ynh1",
     "maintainer": {
         "name": "Josué Tille",
         "email": "josue@tille.ch"
