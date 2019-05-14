@@ -7,6 +7,26 @@ Gogs is a self-hosted Git service written in Go. Alternative to Github.
 
 [![Install Gogs with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=gogs)
 
+# IMPORTANT INFORMATION
+
+**Note that this package will not be longer be maintened by the actual maintener.
+The idea is to migrate to [gitea](https://github.com/YunoHost-Apps/gitea_ynh) which is more featured.**
+
+For the old install you can migrate to gitea easly by juste upgrading your actuall gogs instance with the gitea source by this command:
+```
+sudo yunohost app upgrade -u https://github.com/YunoHost-Apps/gitea_ynh gogs
+```
+**Note that this command contains some risk of data lost. So it's important to make a backup of the app before the install.**
+To make a backup you can use this command:
+```
+sudo yunohost backup create --debug --apps gogs
+```
+
+For the new install just install gitea by this command:
+```
+sudo yunohost app install -l Gitea https://github.com/YunoHost-Apps/gitea_ynh
+```
+
 ## Requirements
 A functional instance of [YunoHost](https://yunohost.org)
 
