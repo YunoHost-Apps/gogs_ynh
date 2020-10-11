@@ -1,5 +1,4 @@
 {
-    "package_format": 1,
     "name": "Gogs",
     "id": "gogs",
     "packaging_format": 1,
@@ -9,7 +8,7 @@
     },
     "url": "http://gogs.io",
     "license": "MIT",
-    "version": "0.11.66~ynh1",
+    "version": "0.12.3~ynh1",
     "maintainer": {
         "name": "Josué Tille",
         "email": "josue@tille.ch"
@@ -24,7 +23,7 @@
         "mysql"
     ],
     "requirements": {
-        "yunohost": ">= 2.7.12"
+        "yunohost": ">= 3.8.1"
     },
     "arguments": {
         "install" : [

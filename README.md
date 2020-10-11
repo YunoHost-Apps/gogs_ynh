@@ -1,4 +1,4 @@
-# Gogs package for YunoHost
+# Gogs for YunoHost
 
 Gogs is a self-hosted Git service written in Go. Alternative to Github.
 - [Gogs website](http://gogs.io)
@@ -77,27 +77,23 @@ Architecture: this package is compatible with amd64, i386 and arm. The package w
 ## Private Mode
 Actually it's possible to access to the git repositories by the `git` command over http also in private mode installation. It's important to know that in this mode the repository could be ALSO getted if you don't set the repository as private in the repos settings.
 
-## Issue
 
-Any issue is welcome here : https://github.com/YunoHost-Apps/gogs_ynh/issues
+## Links
 
-## License
-Gogs is published under the MIT License:
-https://github.com/gogits/gogs/blob/master/LICENSE
+ * Report a bug: https://github.com/YunoHost-Apps/gogs_ynh/issues
+ * App website: http://gogs.io
+ * Upstream app repository: https://github.com/gogs/gogs
+ * YunoHost website: https://yunohost.org/
 
-This package is published under the MIT License.
+---
 
+## Developer info
 
-## Developper info
-Please do your pull requests to the `dev` branch.
+Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/gogs_ynh/tree/testing).
 
-Test or upgrade to dev version:
-```bash
-sudo su - admin
-git clone -b dev https://github.com/YunoHost-Apps/gogs_ynh
-# to install
-sudo yunohost app install -l Gogs /home/admin/gogs_ynh
-# to upgrade
-sudo yunohost app upgrade -f /home/admin/gogs_ynh gogs
-
+To try the testing branch, please proceed like that.
+```
+sudo yunohost app install https://github.com/YunoHost-Apps/gogs_ynh/tree/testing --debug
+or
+sudo yunohost app upgrade gogs -u https://github.com/YunoHost-Apps/gogs_ynh/tree/testing --debug
 ```
