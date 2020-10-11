@@ -1,16 +1,20 @@
 # Gogs for YunoHost
 
-Gogs is a self-hosted Git service written in Go. Alternative to Github.
-- [Gogs website](http://gogs.io)
-
-[![Integration level](https://dash.yunohost.org/integration/gogs.svg)](https://ci-apps.yunohost.org/jenkins/job/gogs%20%28Community%29/lastBuild/consoleFull) 
-
+[![Integration level](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)  
 [![Install Gogs with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=gogs)
 
-# IMPORTANT INFORMATION
+*[Lire ce readme en français.](./README_fr.md)*
 
-**Note that this package will not be longer be maintened by the actual maintener.
-The idea is to migrate to [gitea](https://github.com/YunoHost-Apps/gitea_ynh) which is more featured.**
+> *This package allows you to install Gogs quickly and simply on a YunoHost server.  
+If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
+
+## Overview
+Gogs is a self-hosted Git service written in Go. Alternative to Github.
+
+## Info
+**Shipped version:** 0.12.3
+
+# IMPORTANT INFORMATION
 
 For the old install you can migrate to gitea easly by juste upgrading your actuall gogs instance with the gitea source by this command:
 ```
@@ -67,8 +71,6 @@ Also, in some cases, Gogs will not restart properly during the update. If so, yo
 
 Sources and issues of the old package can be found [here](https://github.com/YunoHost-Apps/gogs_ynh_old/)
 
-## Info
-Gogs v0.11.66
 
 - [YunoHost forum thread](https://forum.yunohost.org/t/gogs-package-an-awesome-github-alternative/1127)
 
