@@ -3,10 +3,11 @@
 [![Integration level](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)  
 [![Install Gogs with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=gogs)
 
-# IMPORTANT INFORMATION
+> *This package allows you to install Gogs quickly and simply on a YunoHost server.  
+If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
 
-**Note that this package will not be longer be maintened by the actual maintener.
-The idea is to migrate to [gitea](https://github.com/YunoHost-Apps/gitea_ynh) which is more featured.**
+> :warning: **Note that this package will not be longer be maintened by the actual maintener.
+> The idea is to migrate to [gitea](https://github.com/YunoHost-Apps/gitea_ynh) which is more featured.**
 
 ## Overview
 Gogs is a self-hosted Git service written in Go. Alternative to Github.
