@@ -1,5 +1,4 @@
 {
-    "package_format": 1,
     "name": "Gogs",
     "id": "gogs",
     "packaging_format": 1,
@@ -7,9 +6,9 @@
         "en": "Lightweight git forge",
         "fr": "Forge git légère"
     },
+    "version": "0.11.66~ynh1",
     "url": "http://gogs.io",
     "license": "MIT",
-    "version": "0.11.66~ynh1",
     "maintainer": {
         "name": "Josué Tille",
         "email": "josue@tille.ch"
@@ -24,7 +23,7 @@
         "mysql"
     ],
     "requirements": {
-        "yunohost": ">= 2.7.12"
+        "yunohost": ">= 3.8.1"
     },
     "arguments": {
         "install" : [
@@ -60,7 +59,7 @@
                 "name": "is_public",
                 "type": "boolean",
                 "ask": {
-                    "en": "Is it a public site ?",
+                    "en": "Is it a public site?",
                     "fr": "Est-ce un site public ?"
                 },
                 "default": true
