@@ -1,21 +1,24 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
+# GENERIC STARTING
+#=================================================
+# IMPORT GENERIC HELPERS
 #=================================================
 
-# IMPORT GENERIC HELPERS
+source _common.sh
 source /usr/share/yunohost/helpers
 
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-# Import common cmd
-source ./_common.sh
-
+#=================================================
 # RETRIEVE ARGUMENTS
+#=================================================
+
 old_domain=$YNH_APP_OLD_DOMAIN
 domain=$YNH_APP_NEW_DOMAIN
+
 path_url=$(ynh_normalize_url_path ${YNH_APP_NEW_PATH:-'/'})
 app=$YNH_APP_INSTANCE_NAME
 

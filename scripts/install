@@ -3,21 +3,34 @@
 #=================================================
 # GENERIC START
 #=================================================
-
 # IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
 source /usr/share/yunohost/helpers
 
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+ynh_clean_setup () {
+	true
+}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-# Load common variables and helpers
-source ./_common.sh
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
 
 # Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$(ynh_normalize_url_path $YNH_APP_ARG_PATH)
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
+
+app=$YNH_APP_INSTANCE_NAME
+
 
 # Check domain/path availability
 ynh_webpath_available $domain $path_url || ynh_die "$domain is not available as domain, please use an other domain."
@@ -57,36 +70,115 @@ test getent passwd "$app" &>/dev/null || \
     useradd -d "$DATADIR" --system --user-group "$app" --shell /bin/bash || \
         ynh_die "Unable to create $app system account"
 
+#=================================================
+# CREAT DIRECTORIES
+#=================================================
+
 # create needed directories
-create_dir
+mkdir -p "$final_path/data"
+mkdir -p "$final_path/custom/conf/auth.d"
+mkdir -p "$DATA_PATH/avatars"
+mkdir -p "$DATA_PATH/attachments"
+mkdir -p "/var/log/$app"
 
-# Install Gogs
-ynh_setup_source $final_path $architecture
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_script_progression --message="Setting up source files..." --weight=3
 
-# Configure gogs with app.ini file
-config_gogs
+ynh_setup_source --dest_dir=$final_path $architecture
+
+#=================================================
+# MODIFY A CONFIG FILE
+#=================================================
+
+cp ../conf/app.ini "$final_path/custom/conf"
+cp ../conf/ldap.conf "$final_path/custom/conf/auth.d/ldap.conf"
+
+if [ "$path_url" = "/" ]
+then
+    ynh_replace_string --match_string="__URL__" --replace_string="$domain" --target_file="$final_path/custom/conf/app.ini"
+else
+    ynh_replace_string --match_string="__URL__" --replace_string="$domain${path_url%/}" --target_file="$final_path/custom/conf/app.ini"
+fi
+
+ynh_replace_string --match_string="__REPOS_PATH__"  --replace_string="$REPO_PATH" --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DB_PASSWORD__" --replace_string="$dbpass"    --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DB_USER__"     --replace_string="$dbuser"    --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DOMAIN__"      --replace_string="$domain"    --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__KEY__"         --replace_string="$key"       --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DATA_PATH__"   --replace_string="$DATA_PATH" --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__PORT__"        --replace_string="$port"      --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__APP__"         --replace_string="$app"       --target_file="$final_path/custom/conf/app.ini"
+
+if [[ "$is_public" = '1' ]]
+then
+    ynh_replace_string --match_string="__PRIVATE_MODE__" --replace_string="false" --target_file="$final_path/custom/conf/app.ini"
+else
+    ynh_replace_string --match_string="__PRIVATE_MODE__" --replace_string="true" --target_file="$final_path/custom/conf/app.ini"
+fi
+
+ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/custom/conf/auth.d/ldap.conf"
+
+ynh_store_file_checksum --file="$final_path/custom/conf/app.ini"
+ynh_store_file_checksum --file="$final_path/custom/conf/auth.d/ldap.conf"
+
+
+
 
 # Configure init script
 ynh_add_systemd_config
 
+#=================================================
+# CONFIGURE NGINX
+#=================================================
 # Modify Nginx configuration file and copy it to Nginx conf directory
-config_nginx
+if [ "$path_url" != "/" ]
+then
+    ynh_replace_string --match_string="^#sub_path_only" --replace_string="" --target_file="../conf/nginx.conf"
+fi
+    ynh_add_nginx_config
 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
 
-# Set permissions
-set_permission
+chown -R $app:$app "$final_path"
+chown -R $app:$app "/home/$app"
+chown -R $app:$app "/var/log/$app"
+chmod u=rwX,g=rX,o= "$final_path"
+chmod u=rwX,g=rX,o= "/home/$app"
+chmod u=rwX,g=rX,o= "/var/log/$app"
+
 
 # Unprotect root from SSO if public
 set_access_settings
 
-# Add Gogs to YunoHost's monitored services
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+
 yunohost service add "$app" --log "/var/log/$app/$app.log"
 
-# Configure logrotate
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Configuring log rotation..." --weight=1
+
 ynh_use_logrotate "/var/log/$app"
 
-# Reload services
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..." --weight=1
+
 ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed" --last
