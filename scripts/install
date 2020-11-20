@@ -55,7 +55,6 @@ key=$(ynh_string_random)
 #=================================================
 ynh_script_progression --message="Storing installation settings..." --weight=1
 
-ynh_app_setting_set --app=$app --key=mysqlpwd --value=$dbpass
 ynh_app_setting_set --app=$app --key=adminusername --value=$admin
 ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 ynh_app_setting_set --app=$app --key=secret_key --value=$key

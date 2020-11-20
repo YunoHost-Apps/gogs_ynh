@@ -119,5 +119,5 @@ ynh_check_starting () {
     local service_name="${4:-$app}"
     local app_log="${2:-/var/log/$service_name/$service_name.log}"
     local timeout=${3:-300}
-
+}
    
