@@ -63,9 +63,9 @@ ynh_secure_remove --file="$final_path"
 # REMOVE VARIOUS FILES
 #=================================================
 
-ynh_secure_remove "$DATADIR"
+ynh_secure_remove --file="/home/$app"
 
-ynh_secure_remove "/var/log/$app"
+ynh_secure_remove --file="/var/log/$app"
 
 #=================================================
 # REMOVE LOGROTATE CONFIGURATION
