@@ -42,13 +42,9 @@ test ! -e "$final_path" || ynh_die --message="This path already contains a folde
 # Register (book) web path
 ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
-
-
 # Generate random password and key
 
 key=$(ynh_string_random)
-
-
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
@@ -58,7 +54,6 @@ ynh_script_progression --message="Storing installation settings..." --weight=1
 ynh_app_setting_set --app=$app --key=adminusername --value=$admin
 ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 ynh_app_setting_set --app=$app --key=secret_key --value=$key
-ynh_app_setting_set --app=$app --key=web_port --value=$port
 
 #=================================================
 # STANDARD MODIFICATIONS
