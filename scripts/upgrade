@@ -9,7 +9,6 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-# Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
 #=================================================
@@ -23,7 +22,6 @@ domain=$(ynh_app_setting_get "$app" domain)
 path_url=$(ynh_normalize_url_path $(ynh_app_setting_get "$app" path))
 db_pwd=$(ynh_app_setting_get "$app" mysqlpwd)
 admin=$(ynh_app_setting_get "$app" adminusername)
-key=$(ynh_app_setting_get "$app" secret_key)
 is_public=$(ynh_app_setting_get "$app" is_public)
 port=$(ynh_app_setting_get "$app" web_port)
 
