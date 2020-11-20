@@ -90,25 +90,32 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 ynh_setup_source --dest_dir=$final_path --source_id="$architecture"
 
 #=================================================
+# CREAT DIRECTORIES
+#=================================================
+
+mkdir -p "/home/$app"
+
+DATADIR="/home/$app"
+
+REPO_PATH="/home/$app/repositories"
+DATA_PATH="/home/$app/data"
+
+# create needed directories
+mkdir -p "$final_path/data"
+mkdir -p "$final_path/custom/conf/auth.d"
+mkdir -p "/home/$app/data/avatars"
+mkdir -p "/home/$app/data/attachments"
+mkdir -p "/var/log/$app"
+
+#=================================================
 # STANDARD MODIFICATIONS
 #=================================================
 
 # Add users
 # We can't use the official helper because we need to set the shell for the login
 test getent passwd "$app" &>/dev/null || \
-    useradd -d "$DATADIR" --system --user-group "$app" --shell /bin/bash || \
+    useradd -d "/home/$app" --system --user-group "$app" --shell /bin/bash || \
         ynh_die "Unable to create $app system account"
-
-#=================================================
-# CREAT DIRECTORIES
-#=================================================
-
-# create needed directories
-mkdir -p "$final_path/data"
-mkdir -p "$final_path/custom/conf/auth.d"
-mkdir -p "$DATA_PATH/avatars"
-mkdir -p "$DATA_PATH/attachments"
-mkdir -p "/var/log/$app"
 
 #=================================================
 # MODIFY A CONFIG FILE
@@ -171,7 +178,6 @@ chown -R $app:$app "/var/log/$app"
 chmod u=rwX,g=rX,o= "$final_path"
 chmod u=rwX,g=rX,o= "/home/$app"
 chmod u=rwX,g=rX,o= "/var/log/$app"
-
 
 # Unprotect root from SSO if public
 set_access_settings
