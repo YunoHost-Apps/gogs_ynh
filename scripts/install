@@ -114,11 +114,11 @@ mkdir -p "/var/log/$app"
 # STANDARD MODIFICATIONS
 #=================================================
 
-# Add users
-# We can't use the official helper because we need to set the shell for the login
-test getent passwd "$app" &>/dev/null || \
-    useradd -d "/home/$app" --system --user-group "$app" --shell /bin/bash || \
-        ynh_die "Unable to create $app system account"
+# # Add users
+# # We can't use the official helper because we need to set the shell for the login
+# test getent passwd "$app" &>/dev/null || \
+#     useradd -d "/home/$app" --system --user-group "$app" --shell /bin/bash || \
+#         ynh_die "Unable to create $app system account"
 
 #=================================================
 # MODIFY A CONFIG FILE
