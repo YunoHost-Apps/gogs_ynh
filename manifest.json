@@ -3,8 +3,8 @@
     "id": "gogs",
     "packaging_format": 1,
     "description": {
-        "en": "Lightweight git forge",
-        "fr": "Forge git légère"
+        "en": "Lightweight Git forge",
+        "fr": "Forge Git légère"
     },
     "version": "0.12.3~ynh1",
     "url": "http://gogs.io",
