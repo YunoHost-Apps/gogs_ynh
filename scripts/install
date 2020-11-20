@@ -43,10 +43,6 @@ test ! -e "$final_path" || ynh_die --message="This path already contains a folde
 # Register (book) web path
 ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
-# Generate random password and key
-
-key=$(ynh_string_random)
-
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
@@ -135,7 +131,7 @@ ynh_replace_string --match_string="__REPOS_PATH__"  --replace_string="$REPO_PATH
 ynh_replace_string --match_string="__DB_PASSWORD__" --replace_string="$db_pwd"    --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DB_USER__"     --replace_string="$db_user"    --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DOMAIN__"      --replace_string="$domain"    --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__KEY__"         --replace_string="$key"       --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__KEY__"         --replace_string="$(ynh_string_random)" --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DATA_PATH__"   --replace_string="$DATA_PATH" --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__PORT__"        --replace_string="$port"      --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__APP__"         --replace_string="$app"       --target_file="$final_path/custom/conf/app.ini"
@@ -151,8 +147,6 @@ ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target
 
 ynh_store_file_checksum --file="$final_path/custom/conf/app.ini"
 ynh_store_file_checksum --file="$final_path/custom/conf/auth.d/ldap.conf"
-
-
 
 
 # Configure init script
