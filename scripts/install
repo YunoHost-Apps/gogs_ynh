@@ -81,9 +81,8 @@ db_name=$(ynh_sanitize_dbid --db_name=$app)
 db_user=$db_name
 ynh_app_setting_set --app=$app --key=db_name --value=$db_name
 ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
+db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 
-
-dbpass=$(ynh_string_random) #to be changed
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
@@ -127,8 +126,8 @@ else
 fi
 
 ynh_replace_string --match_string="__REPOS_PATH__"  --replace_string="$REPO_PATH" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__DB_PASSWORD__" --replace_string="$dbpass"    --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__DB_USER__"     --replace_string="$dbuser"    --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DB_PASSWORD__" --replace_string="$db_pwd"    --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DB_USER__"     --replace_string="$db_user"    --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DOMAIN__"      --replace_string="$domain"    --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__KEY__"         --replace_string="$key"       --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DATA_PATH__"   --replace_string="$DATA_PATH" --target_file="$final_path/custom/conf/app.ini"

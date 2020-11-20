@@ -21,7 +21,7 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get "$app" domain)
 path_url=$(ynh_normalize_url_path $(ynh_app_setting_get "$app" path))
-dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
+db_pwd=$(ynh_app_setting_get "$app" mysqlpwd)
 admin=$(ynh_app_setting_get "$app" adminusername)
 key=$(ynh_app_setting_get "$app" secret_key)
 is_public=$(ynh_app_setting_get "$app" is_public)
@@ -87,7 +87,7 @@ fi
 # Remove old authentification mecanisme, actually the registry in the database has been replaced by a config file
 if [[ ! -e "$final_path/custom/conf/auth.d/ldap.conf" ]]
 then
-    ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname"  <<< "DELETE FROM login_source WHERE name = 'Yunohost LDAP';"
+    ynh_mysql_connect_as "$db_user" "$db_pwd" "$db_name"  <<< "DELETE FROM login_source WHERE name = 'Yunohost LDAP';"
     mkdir -p "$final_path/custom/conf/auth.d"
 fi
 

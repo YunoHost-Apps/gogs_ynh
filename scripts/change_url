@@ -22,7 +22,7 @@ domain=$YNH_APP_NEW_DOMAIN
 path_url=$(ynh_normalize_url_path ${YNH_APP_NEW_PATH:-'/'})
 app=$YNH_APP_INSTANCE_NAME
 
-dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
+db_pwd=$(ynh_app_setting_get "$app" mysqlpwd)
 admin=$(ynh_app_setting_get "$app" adminusername)
 key=$(ynh_app_setting_get "$app" secret_key)
 port=$(ynh_app_setting_get "$app" web_port)

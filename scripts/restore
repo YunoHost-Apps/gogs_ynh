@@ -30,7 +30,7 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
-dbpass=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
+db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 admin=$(ynh_app_setting_get --app=$app --key=adminusername)
 
 
