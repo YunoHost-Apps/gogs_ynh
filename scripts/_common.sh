@@ -2,10 +2,7 @@
 # SET ALL CONSTANTS
 #=================================================
 
-app=$YNH_APP_INSTANCE_NAME
-dbname=$app
-dbuser=$app
-final_path="/opt/$app"
+
 DATADIR="/home/$app"
 REPO_PATH="$DATADIR/repositories"
 DATA_PATH="$DATADIR/data"
