@@ -20,6 +20,9 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+db_name=$(ynh_app_setting_get --app=$app --key=db_name)
+db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 admin=$(ynh_app_setting_get --app=$app --key=adminusername)
 is_public=$(ynh_app_setting_get --app=$app --key=is_public)
@@ -136,7 +139,7 @@ chmod u=rwX,g=rX,o= "/var/log/$app"
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
-yunohost service add "$app" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
 
 #=================================================
 # RELOAD NGINX

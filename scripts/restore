@@ -32,50 +32,82 @@ path_url=$(ynh_app_setting_get --app=$app --key=path)
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 admin=$(ynh_app_setting_get --app=$app --key=adminusername)
 
-# Check domain/path availability with app helper
-ynh_webpath_available $domain $path_url || ynh_die "$domain is not available as domain, please use an other domain."
+#=================================================
+# CHECK IF THE APP CAN BE RESTORED
+#=================================================
+ynh_script_progression --message="Validating restoration parameters..." --weight=2
 
-# Check user parameter
-ynh_user_exists "$admin" \
-  || ynh_die "The chosen admin user does not exist."
-
-# Check Final Path availability
-test ! -e "$final_path" || ynh_die "This path already contains a folder"
+ynh_webpath_available --domain=$domain --path_url=$path_url \
+	|| ynh_die --message="Path not available: ${domain}${path_url}"
+test ! -d $final_path \
+	|| ynh_die --message="There is already a directory: $final_path "
 
 #=================================================
 # STANDARD RESTORATION STEPS
 #=================================================
+# RESTORE THE NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the NGINX configuration..."
 
-# Add users
-# We can't use the official helper because we need to set the shell for the login
-test getent passwd "$app" &>/dev/null || \
-    useradd -d "$DATADIR" --system --user-group "$app" --shell /bin/bash || \
-        ynh_die "Unable to create $app system account"
+ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
-# Restore all files
-ynh_restore
+#=================================================
+# RESTORE THE APP MAIN DIR
+#=================================================
+ynh_script_progression --message="Restoring $app main directory..." --weight=10
 
-# Create and restore the database
-ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"
-ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ./db.sql
+ynh_restore_file --origin_path="$final_path"
 
-# Restore systemd files
-systemctl daemon-reload
-systemctl enable "$app".service --quiet
+#=================================================
+# RECREATE THE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Recreating the dedicated system user..." --weight=1
+
+# Create the dedicated user (if not existing)
+ynh_system_user_create --username=$app
+
+#=================================================
+# RESTORE THE MYSQL DATABASE
+#=================================================
+ynh_script_progression --message="Restoring the MySQL database..." --time --weight=1
+
+db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
+ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name --db_pwd=$db_pwd
+ynh_mysql_connect_as --user=$db_user --password=$db_pwd --database=$db_name < ./db.sql
+
+#=================================================
+# RESTORE SYSTEMD
+#=================================================
+ynh_script_progression --message="Restoring the systemd configuration..." --weight=5
+
+ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
+systemctl enable $app.service --quiet
+
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
+
+yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..." --weight=1
+
+ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="HTTP Server listening"
 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
-# Set permissions
-set_permission
+ynh_systemd_action --service_name=nginx --action=reload
 
-# Configure logrotate
-ynh_use_logrotate "/var/log/$app"
+#=================================================
+# END OF SCRIPT
+#=================================================
 
-# Add Gogs to YunoHost's monitored services
-yunohost service add "$app" --log /var/log/"$app"/"$app".log
-
-# Reload services
-systemctl reload nginx.service
-ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+ynh_script_progression --message="Restoration completed for $app" --last
