@@ -35,28 +35,28 @@ ynh_print_info --message="Declaring files to be backed up..."
 # BACKUP THE APP MAIN DIR
 #=================================================
 
-ynh_backup "$final_path"
+ynh_backup --src_path="$final_path"
 
 # Copy the data files
-ynh_backup "$DATADIR"
+ynh_backup --src_path="/home/$app"
 
 #=================================================
 # BACKUP THE NGINX CONFIGURATION
 #=================================================
 
-ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
 # BACKUP SYSTEMD
 #=================================================
 
-ynh_backup "/etc/systemd/system/${app}.service"
+ynh_backup --src_path="/etc/systemd/system/$app.service"
 
 #=================================================
 # BACKUP VARIOUS FILES
 #=================================================
 
-ynh_backup "/var/log/$app"
+ynh_backup --src_path="/var/log/$app"
 
 #=================================================
 # BACKUP THE MYSQL DATABASE
