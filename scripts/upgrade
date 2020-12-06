@@ -86,23 +86,23 @@ else
     ynh_replace_string "__URL__" "$domain${path_url%/}" "$final_path/custom/conf/app.ini"
 fi
 
-ynh_replace_string "__REPOS_PATH__" "$REPO_PATH" "$final_path/custom/conf/app.ini"
-ynh_replace_string "__DB_PASSWORD__" "$dbpass" "$final_path/custom/conf/app.ini"
-ynh_replace_string "__DB_USER__" "$dbuser" "$final_path/custom/conf/app.ini"
-ynh_replace_string "__DOMAIN__" "$domain" "$final_path/custom/conf/app.ini"
-ynh_replace_string "__KEY__" "$key" "$final_path/custom/conf/app.ini"
-ynh_replace_string "__DATA_PATH__" "$DATA_PATH" "$final_path/custom/conf/app.ini"
-ynh_replace_string "__PORT__" $port "$final_path/custom/conf/app.ini"
-ynh_replace_string "__APP__" $app "$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__REPOS_PATH__"  --replace_string="$REPO_PATH" --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DB_PASSWORD__" --replace_string="$db_pwd"    --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DB_USER__"     --replace_string="$db_user"    --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DOMAIN__"      --replace_string="$domain"    --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__KEY__"         --replace_string="$(ynh_string_random)" --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DATA_PATH__"   --replace_string="$DATA_PATH" --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__PORT__"        --replace_string="$port"      --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__APP__"         --replace_string="$app"       --target_file="$final_path/custom/conf/app.ini"
 
 if [[ "$is_public" = '1' ]]
 then
-    ynh_replace_string "__PRIVATE_MODE__" "false" "$final_path/custom/conf/app.ini"
+    ynh_replace_string --match_string="__PRIVATE_MODE__" --replace_string="false" --target_file="$final_path/custom/conf/app.ini"
 else
-    ynh_replace_string "__PRIVATE_MODE__" "true" "$final_path/custom/conf/app.ini"
+    ynh_replace_string --match_string="__PRIVATE_MODE__" --replace_string="true" --target_file="$final_path/custom/conf/app.ini"
 fi
 
-ynh_replace_string "__ADMIN__" "$admin" "$final_path/custom/conf/auth.d/ldap.conf"
+ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/custom/conf/auth.d/ldap.conf"
 
 ynh_store_file_checksum "$final_path/custom/conf/app.ini"
 ynh_store_file_checksum "$final_path/custom/conf/auth.d/ldap.conf"
@@ -110,7 +110,7 @@ ynh_store_file_checksum "$final_path/custom/conf/auth.d/ldap.conf"
 #=================================================
 # SETUP SYSTEMD
 #=================================================
-ynh_script_progression --message="Upgrading systemd configuration..." --time --weight=1
+ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
@@ -118,7 +118,7 @@ ynh_add_systemd_config
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --time --weight=1
+ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=2
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
@@ -127,6 +127,7 @@ ynh_add_nginx_config
 # SECURE FILES AND DIRECTORIES
 #=================================================
 
+# Set permissions to app files
 chown -R $app:$app "$final_path"
 chown -R $app:$app "/home/$app"
 chown -R $app:$app "/var/log/$app"
@@ -137,14 +138,22 @@ chmod u=rwX,g=rX,o= "/var/log/$app"
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
 yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
 
 #=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..." --weight=1
+
+# Start a systemd service
+ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
+
+#=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --time --weight=1
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
