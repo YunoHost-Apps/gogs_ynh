@@ -16,10 +16,5 @@
         multi_instance=1
         port_already_use=1
         change_url=1
-;;; Levels
-    Level 5=auto
 ;;; Upgrade options
-	; commit=aa075b2051ffad7b0b6fef3a9c767376d5bdbfab
-		name=Before multi_instance and refactoring
-	; commit=1cbec051e1171de5a8ed1e850eb4fb3506114da5
-		name=From V0.10.18
+

@@ -6,9 +6,8 @@ After=mysql.service
 After=slapd.service
 
 [Service]
-# Modify these two values and uncomment them if you have
-# repos with lots of files and get an HTTP error 500 because
-# of that
+# Modify these two values and uncomment them if you have repos
+# with lots of files and get an HTTP error 500 because of that
 ###
 #LimitMEMLOCK=infinity
 #LimitNOFILE=65535

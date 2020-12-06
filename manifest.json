@@ -10,8 +10,8 @@
     "url": "http://gogs.io",
     "license": "MIT",
     "maintainer": {
-        "name": "Josué Tille",
-        "email": "josue@tille.ch"
+        "name": "",
+        "email": ""
     },
     "previous_maintainers": {
         "name": "tostaki",
