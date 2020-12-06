@@ -64,7 +64,7 @@ ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ./db.sql
 
 # Restore systemd files
 systemctl daemon-reload
-systemctl enable "$app".service
+systemctl enable "$app".service --quiet
 
 #=================================================
 # GENERIC FINALIZATION
