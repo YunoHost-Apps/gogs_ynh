@@ -32,14 +32,6 @@ create_dir() {
     mkdir -p "/var/log/$app"
 }
 
-config_nginx() {
-    if [ "$path_url" != "/" ]
-    then
-        ynh_replace_string "^#sub_path_only" "" "../conf/nginx.conf"
-    fi
-    ynh_add_nginx_config
-}
-
 config_gogs() {
     ynh_backup_if_checksum_is_different "$final_path/custom/conf/app.ini"
     ynh_backup_if_checksum_is_different "$final_path/custom/conf/auth.d/ldap.conf"
