@@ -11,25 +11,15 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 Gogs is a self-hosted Git service written in Go. Alternative to Github.
 
-## Info
 **Shipped version:** 0.12.3
 
-# IMPORTANT INFORMATION
+## Screenshots
 
-For the old install you can migrate to gitea easly by juste upgrading your actuall gogs instance with the gitea source by this command:
-```
-sudo yunohost app upgrade -u https://github.com/YunoHost-Apps/gitea_ynh gogs
-```
-**Note that this command contains some risk of data lost. So it's important to make a backup of the app before the install.**
-To make a backup you can use this command:
-```
-sudo yunohost backup create --debug --apps gogs
-```
+![](https://gogs.io/img/screenshots/2.png)
 
-For the new install just install gitea by this command:
-```
-sudo yunohost app install -l Gitea https://github.com/YunoHost-Apps/gitea_ynh
-```
+## Demo
+
+* [Official demo](https://try.gogs.io/user/login)
 
 ## Notes on SSH usage
 If you want to use Gogs with ssh and be able to pull/push with you ssh key, your ssh daemon must be properly configured to use private/public keys. Here is a sample configuration of `/etc/ssh/sshd_config` that works with Gogs:

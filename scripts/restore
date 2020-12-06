@@ -6,7 +6,6 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-#Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
 source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
@@ -15,7 +14,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 ynh_clean_setup () {
-	true
+	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -72,7 +71,7 @@ ynh_system_user_create --username=$app
 #=================================================
 # RESTORE THE MYSQL DATABASE
 #=================================================
-ynh_script_progression --message="Restoring the MySQL database..." --time --weight=1
+ynh_script_progression --message="Restoring the MySQL database..." --weight=3
 
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name --db_pwd=$db_pwd
@@ -89,14 +88,14 @@ systemctl enable $app.service --quiet
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=1
+ynh_script_progression --message="Starting a systemd service..." --weight=3
 
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="HTTP Server listening"
 
