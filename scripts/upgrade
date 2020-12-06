@@ -27,6 +27,7 @@ db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 admin=$(ynh_app_setting_get --app=$app --key=adminusername)
 is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 port=$(ynh_app_setting_get --app=$app --key=web_port)
+architecture=$(ynh_detect_arch)
 
 #=================================================
 # CHECK VERSION
