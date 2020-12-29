@@ -12,7 +12,7 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=/home/__APP__
-ExecStart=/var/www/gogs/gogs web
+ExecStart=__FINALPATH__/gogs web
 Restart=always
 Environment=USER=__APP__ HOME=/home/__APP__
 
