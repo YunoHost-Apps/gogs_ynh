@@ -24,7 +24,7 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-admin=$(ynh_app_setting_get --app=$app --key=adminusername)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
 is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 port=$(ynh_app_setting_get --app=$app --key=port)
 architecture=$(ynh_detect_arch)
@@ -85,9 +85,9 @@ cp ../conf/ldap.conf "$final_path/custom/conf/auth.d/ldap.conf"
 
 if [ "$path_url" = "/" ]
 then
-    ynh_replace_string "__URL__" "$domain" "$final_path/custom/conf/app.ini"
+    ynh_replace_string --match_string="__URL__" --replace_string="$domain" --target_file="$final_path/custom/conf/app.ini"
 else
-    ynh_replace_string "__URL__" "$domain${path_url%/}" "$final_path/custom/conf/app.ini"
+    ynh_replace_string --match_string="__URL__" --replace_string="$domain${path_url%/}" --target_file="$final_path/custom/conf/app.ini"
 fi
 
 ynh_replace_string --match_string="__REPOS_PATH__"  --replace_string="$REPO_PATH" --target_file="$final_path/custom/conf/app.ini"
