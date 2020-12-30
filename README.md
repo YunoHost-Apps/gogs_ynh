@@ -9,7 +9,7 @@
 If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
 
 ## Overview
-Gogs is a self-hosted Git service written in Go. Alternative to Github.
+Gogs is a self-hosted Git service written in Go. Alternative to GitHub.
 
 **Shipped version:** 0.12.3
 
@@ -22,7 +22,7 @@ Gogs is a self-hosted Git service written in Go. Alternative to Github.
 * [Official demo](https://try.gogs.io/user/login)
 
 ## Notes on SSH usage
-If you want to use Gogs with ssh and be able to pull/push with you ssh key, your ssh daemon must be properly configured to use private/public keys. Here is a sample configuration of `/etc/ssh/sshd_config` that works with Gogs:
+If you want to use Gogs with ssh and be able to pull/push with you ssh key, your SSH daemon must be properly configured to use private/public keys. Here is a sample configuration of `/etc/ssh/sshd_config` that works with Gogs:
 
 ```bash
 PubkeyAuthentication yes
@@ -34,7 +34,7 @@ UsePAM no
 
 You also need to add your public key to your Gogs profile.
 
-If you use ssh on another port than 22, you need to add theses lines to your ssh config in `~/.ssh/config`:
+If you use SSH on another port than 22, you need to add theses lines to your SSH config in `~/.ssh/config`:
 
 ```bash
 Host domain.tld
