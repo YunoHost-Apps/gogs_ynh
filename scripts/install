@@ -175,7 +175,7 @@ ynh_add_nginx_config
 chown -R $app: "$final_path"
 chown -R $app: "/home/$app"
 chown -R $app: "/var/log/$app"
-chmod u=rwX,g=rX,o= "$final_path"
+#chmod u=rwX,g=rX,o= "$final_path"
 chmod u=rwX,g=rX,o= "/home/$app"
 chmod u=rwX,g=rX,o= "/var/log/$app"
 
