@@ -34,10 +34,8 @@ create_dir() {
 
 config_gogs() {
     ynh_backup_if_checksum_is_different "$final_path/custom/conf/app.ini"
-    ynh_backup_if_checksum_is_different "$final_path/custom/conf/auth.d/ldap.conf"
 
     cp ../conf/app.ini "$final_path/custom/conf"
-    cp ../conf/ldap.conf "$final_path/custom/conf/auth.d/ldap.conf"
 
     if [ "$path_url" = "/" ]
     then
@@ -47,8 +45,8 @@ config_gogs() {
     fi
 
     ynh_replace_string "__REPOS_PATH__" "$REPO_PATH" "$final_path/custom/conf/app.ini"
-    ynh_replace_string "__DB_PASSWORD__" "$dbpass" "$final_path/custom/conf/app.ini"
-    ynh_replace_string "__DB_USER__" "$dbuser" "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__DB_PWD__" "$dbpass" "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__DB_NAME__" "$dbuser" "$final_path/custom/conf/app.ini"
     ynh_replace_string "__DOMAIN__" "$domain" "$final_path/custom/conf/app.ini"
     ynh_replace_string "__KEY__" "$key" "$final_path/custom/conf/app.ini"
     ynh_replace_string "__DATA_PATH__" "$DATA_PATH" "$final_path/custom/conf/app.ini"
@@ -62,10 +60,9 @@ config_gogs() {
         ynh_replace_string "__PRIVATE_MODE__" "true" "$final_path/custom/conf/app.ini"
     fi
 
-    ynh_replace_string "__ADMIN__" "$admin" "$final_path/custom/conf/auth.d/ldap.conf"
+    ynh_add_config --template="../conf/ldap.conf" --destination="$final_path/custom/conf/auth.d/ldap.conf"
 
     ynh_store_file_checksum "$final_path/custom/conf/app.ini"
-    ynh_store_file_checksum "$final_path/custom/conf/auth.d/ldap.conf"
 }
 
 set_permission() {
