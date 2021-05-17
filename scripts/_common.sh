@@ -45,8 +45,8 @@ config_gogs() {
     fi
 
     ynh_replace_string "__REPOS_PATH__" "$REPO_PATH" "$final_path/custom/conf/app.ini"
-    ynh_replace_string "__DB_PWD__" "$dbpass" "$final_path/custom/conf/app.ini"
-    ynh_replace_string "__DB_NAME__" "$dbuser" "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__DB_PWD__" "$db_pwd" "$final_path/custom/conf/app.ini"
+    ynh_replace_string "__DB_NAME__" "$db_name" "$final_path/custom/conf/app.ini"
     ynh_replace_string "__DOMAIN__" "$domain" "$final_path/custom/conf/app.ini"
     ynh_replace_string "__KEY__" "$key" "$final_path/custom/conf/app.ini"
     ynh_replace_string "__DATA_PATH__" "$DATA_PATH" "$final_path/custom/conf/app.ini"
@@ -75,9 +75,9 @@ set_permission() {
 }
 
 set_access_settings() {
-    if [ "$is_public" = '1' ]
+    if [ $is_public -eq 1 ]
     then
-        ynh_app_setting_set $app unprotected_uris "/"
+        ynh_permission_update --permission="main" --add="visitors"
     else
         # For an access to the git server by https in private mode we need to allow the access to theses URL :
         #  - "DOMAIN/PATH/USER/REPOSITORY/info/refs"
