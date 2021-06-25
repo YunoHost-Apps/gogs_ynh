@@ -14,6 +14,5 @@
         upgrade=1
         backup_restore=1
         multi_instance=1
-        port_already_use=1
         change_url=1
 ;;; Upgrade options
