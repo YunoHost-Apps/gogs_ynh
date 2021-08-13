@@ -3,12 +3,12 @@
     "id": "gogs",
     "packaging_format": 1,
     "description": {
-        "en": "Lightweight git forge",
-        "fr": "Forge git légère"
+        "en": "Lightweight Git forge",
+        "fr": "Forge Git légère"
     },
-    "version": "0.11.66~ynh1",
     "url": "http://gogs.io",
     "license": "MIT",
+    "version": "0.11.66~ynh2",
     "maintainer": {
         "name": "Josué Tille",
         "email": "josue@tille.ch"
