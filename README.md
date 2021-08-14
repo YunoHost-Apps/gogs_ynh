@@ -73,8 +73,6 @@ Also, in some cases, Gogs will not restart properly during the update. If so, yo
 ## Documentation and resources
 
 * Official app website: http://gogs.io
-* Official user documentation: https://yunohost.org/apps
-* Official admin documentation: https://yunohost.org/packaging_apps
 * Upstream app code repository: https://github.com/gogs/gogs
 * YunoHost documentation for this app: https://yunohost.org/app_gogs
 * Report a bug: https://github.com/YunoHost-Apps/gogs_ynh/issues
