@@ -12,8 +12,6 @@
         "license": "MIT",
         "website": "http://gogs.io",
         "demo": "https://try.gogs.io/user/login",
-        "admindoc": "https://yunohost.org/packaging_apps",
-        "userdoc": "https://yunohost.org/apps",
         "code": "https://github.com/gogs/gogs"
     },
     "license": "MIT",
