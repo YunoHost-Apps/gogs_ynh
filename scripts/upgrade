@@ -74,7 +74,7 @@ ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app
 #=================================================
 
 # Clean template to fix issue : https://github.com/gogits/gogs/issues/4585
-ynh_secure_remove "/opt/$app/templates"
+ynh_secure_remove --file="/opt/$app/templates"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
