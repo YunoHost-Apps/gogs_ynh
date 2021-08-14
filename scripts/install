@@ -3,91 +3,220 @@
 #=================================================
 # GENERIC START
 #=================================================
-
 # IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
 source /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
 
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-# Load common variables and helpers
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
 
-source ./_common.sh
-
-# Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
-path_url=$(ynh_normalize_url_path $YNH_APP_ARG_PATH)
+path_url=$YNH_APP_ARG_PATH
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
+secret_key=$(ynh_string_random)
+architecture=$(ynh_detect_arch)
 
-# Check domain/path availability
-ynh_webpath_available $domain $path_url || ynh_die "$domain is not available as domain, please use an other domain."
-ynh_webpath_register $app $domain $path_url
+app=$YNH_APP_INSTANCE_NAME
+
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
+ynh_script_progression --message="Validating installation parameters..."
+
+final_path=/opt/$app
+test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
+
+# Register (book) web path
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
 # Check user parameter
 ynh_user_exists "$admin" \
   || ynh_die "The chosen admin user does not exist."
 
-# Check Final Path availability
-test ! -e "$final_path" || ynh_die "This path already contains a folder"
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
+ynh_script_progression --message="Storing installation settings..."
 
-# Generate random password and key
-dbpass=$(ynh_string_random)
-key=$(ynh_string_random)
-
-# Find available ports
-port=$(ynh_find_port 6000)
-
-# Store Settings
-ynh_app_setting_set $app mysqlpwd $dbpass
-ynh_app_setting_set $app adminusername $admin
-ynh_app_setting_set $app is_public $is_public
-ynh_app_setting_set $app secret_key $key
-ynh_app_setting_set $app web_port $port
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=path --value=$path_url
+ynh_app_setting_set --app=$app --key=admin --value=$admin
+ynh_app_setting_set --app=$app --key=secret_key --value=$secret_key
 
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
+# FIND AND OPEN A PORT
+#=================================================
+ynh_script_progression --message="Finding an available port..."
 
-# Initialize database and store mysql password for upgrade
-ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"
+# Find an available port
+port=$(ynh_find_port --port=6000)
+ynh_app_setting_set --app=$app --key=port --value=$port
 
-# Add users
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..."
+
+# Create a system user
 # We can't use the official helper because we need to set the shell for the login
 test getent passwd "$app" &>/dev/null || \
     useradd -d "$DATADIR" --system --user-group "$app" --shell /bin/bash || \
         ynh_die "Unable to create $app system account"
 
-# create needed directories
-create_dir
+#=================================================
+# CREATE A MYSQL DATABASE
+#=================================================
+ynh_script_progression --message="Creating a MySQL database..."
 
-# Install Gogs
-ynh_setup_source $final_path $architecture
+db_name=$(ynh_sanitize_dbid --db_name=$app)
+db_user=$db_name
+ynh_app_setting_set --app=$app --key=db_name --value=$db_name
+ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 
-# Configure gogs with app.ini file
-config_gogs
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_script_progression --message="Setting up source files..."
 
-# Configure init script
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
+
+mkdir -p "$final_path/data"
+mkdir -p "$final_path/custom/conf/auth.d"
+    
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:$app "$final_path"
+chmod u=rwX,g=rX,o= "$final_path"
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Configuring NGINX web server..."
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
+
+#=================================================
+# SPECIFIC SETUP
+#=================================================
+# CREATE DATA DIRECTORY
+#=================================================
+ynh_script_progression --message="Creating a data directory..."
+
+datadir=/home/$app
+ynh_app_setting_set --app=$app --key=datadir --value=$datadir
+
+mkdir -p "$datadir/avatars"
+mkdir -p "$datadir/attachments"
+
+chmod 750 "$datadir"
+chmod -R o-rwx "$datadir"
+chown -R $app:$app "/home/$app"
+chmod u=rwX,g=rX,o= "/home/$app"
+
+repo_path="$datadir/repositories"
+data_path="$datadir/data"
+
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding a configuration file..."
+
+if [ $is_public -eq 1 ]
+then
+    private_mode="false"
+else
+    private_mode="true"
+fi
+
+ynh_add_config --template="../conf/app.ini" --destination="$final_path/custom/conf/app.ini"
+ynh_add_config --template="../conf/ldap.conf" --destination="$final_path/custom/conf/auth.d/ldap.conf"
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_script_progression --message="Configuring a systemd service..."
+
+# Create a dedicated systemd config
 ynh_add_systemd_config
-
-# Modify Nginx configuration file and copy it to Nginx conf directory
-config_nginx
 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Configuring log rotation..."
 
-# Set permissions
-set_permission
+mkdir -p "/var/log/$app"
+chown -R $app:$app "/var/log/$app"
+chmod u=rwX,g=rX,o= "/var/log/$app"
 
-# Unprotect root from SSO if public
-set_access_settings
+# Use logrotate to manage application logfile(s)
+ynh_use_logrotate
 
-# Add Gogs to YunoHost's monitored services
-yunohost service add "$app" --log "/var/log/$app/$app.log"
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
 
-# Configure logrotate
-ynh_use_logrotate "/var/log/$app"
+yunohost service add $app --log="/var/log/$app/$app.log"
 
-# Reload services
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..."
+
+# Start a systemd service
 ynh_clean_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+ynh_script_progression --message="Configuring permissions..."
+
+# Make app public if necessary
+if [ $is_public -eq 1 ]
+then
+	# Everyone can access the app.
+	# The "main" permission is automatically created before the install script.
+	ynh_permission_update --permission="main" --add="visitors"
+else
+    # For an access to the git server by https in private mode we need to allow the access to theses URL :
+    #  - "DOMAIN/PATH/USER/REPOSITORY/info/refs"
+    #  - "DOMAIN/PATH/USER/REPOSITORY/git-upload-pack"
+    #  - "DOMAIN/PATH/USER/REPOSITORY/git-receive-pack"
+
+    excaped_domain=${domain//'.'/'%.'}
+    excaped_domain=${excaped_domain//'-'/'%-'}
+    excaped_path=${path_url//'.'/'%.'}
+    excaped_path=${excaped_path//'-'/'%-'}
+    ynh_app_setting_set $app skipped_regex "$excaped_domain$excaped_path/[%w-.]*/[%w-.]*/git%-receive%-pack,$excaped_domain$excaped_path/[%w-.]*/[%w-.]*/git%-upload%-pack,$excaped_domain$excaped_path/[%w-.]*/[%w-.]*/info/refs"
+fi
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading NGINX web server..."
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed"

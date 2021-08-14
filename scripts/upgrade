@@ -3,37 +3,62 @@
 #=================================================
 # GENERIC START
 #=================================================
-
 # IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
 source /usr/share/yunohost/helpers
 
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#=================================================
+# LOAD SETTINGS
+#=================================================
+ynh_script_progression --message="Loading installation settings..."
 
-# Load common variables and helpers
-source ./_common.sh
+app=$YNH_APP_INSTANCE_NAME
 
-# Retrieve app settings
-domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_normalize_url_path $(ynh_app_setting_get "$app" path))
-dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
-admin=$(ynh_app_setting_get "$app" adminusername)
-key=$(ynh_app_setting_get "$app" secret_key)
-is_public=$(ynh_app_setting_get "$app" is_public)
-port=$(ynh_app_setting_get "$app" web_port)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+db_name=$(ynh_app_setting_get --app=$app --key=db_name)
+secret_key=$(ynh_app_setting_get --app=$app --key=secret_key)
+is_public=$(ynh_app_setting_get --app=$app --key=is_public)
+port=$(ynh_app_setting_get --app=$app --key=port)
+
+#=================================================
+# CHECK VERSION
+#=================================================
+ynh_script_progression --message="Checking version..."
+
+upgrade_type=$(ynh_check_app_version_changed)
+
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..."
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
-    ynh_restore_upgradebackup
+	# Restore it if the upgrade fails
+	ynh_restore_upgradebackup
 }
-
-# Stop service
-systemctl stop "$app".service
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 #=================================================
-# MIGRATION FROM OLD VERSION
+# STANDARD UPGRADE STEPS
 #=================================================
+# STOP SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Stopping a systemd service..."
+
+ynh_systemd_action --service_name=$app --action="stop"
+
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_script_progression --message="Ensuring downward compatibility..."
 
 # Update settings is_public to new standard
 if [ "$is_public" = "Yes" ]; then
@@ -86,34 +111,95 @@ then
     mkdir -p "$final_path/custom/conf/auth.d"
 fi
 
-#=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
-
 # Clean template to fix issue : https://github.com/gogits/gogs/issues/4585
 ynh_secure_remove "/opt/gogs/templates"
 
-# Install Gogs
-ynh_setup_source $final_path $architecture
+#=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
 
-# Configure gogs with app.ini file
-config_gogs
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+	ynh_script_progression --message="Upgrading source files..."
 
-# Configure init script
+	# Download, check integrity, uncompress and patch the source from app.src
+	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
+fi
+
+mkdir -p "$final_path/data"
+mkdir -p "$final_path/custom/conf/auth.d"
+    
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:$app "$final_path"
+chmod u=rwX,g=rX,o= "$final_path"
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Upgrading NGINX web server configuration..."
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
+
+#=================================================
+# SPECIFIC UPGRADE
+#=================================================
+# UPDATE A CONFIG FILE
+#=================================================
+ynh_script_progression --message="Updating a configuration file..."
+if [ $is_public -eq 1 ]
+then
+    private_mode="false"
+else
+    private_mode="true"
+fi
+
+ynh_add_config --template="../conf/app.ini" --destination="$final_path/custom/conf/app.ini"
+ynh_add_config --template="../conf/ldap.conf" --destination="$final_path/custom/conf/auth.d/ldap.conf"
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_script_progression --message="Upgrading systemd configuration..."
+
+# Create a dedicated systemd config
 ynh_add_systemd_config
-
-# Modify Nginx configuration file and copy it to Nginx conf directory
-config_nginx
 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Upgrading logrotate configuration..."
 
-# Unprotect root from SSO if public
-set_access_settings
+# Use logrotate to manage app-specific logfile(s)
+ynh_use_logrotate --non-append
 
-# Set permissions
-set_permission
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
 
-# Reload services
+yunohost service add $app --log="/var/log/$app/$app.log"
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..."
 ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading NGINX web server..."
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Upgrade of $app completed"
