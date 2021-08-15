@@ -27,6 +27,8 @@ admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
 secret_key=$(ynh_string_random)
 
+datadir=/home/$app
+
 app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
@@ -73,7 +75,7 @@ ynh_script_progression --message="Configuring system user..."
 # Create a system user
 # We can't use the official helper because we need to set the shell for the login
 test getent passwd "$app" &>/dev/null || \
-    useradd -d "$DATADIR" --system --user-group "$app" --shell /bin/bash || \
+    useradd -d "$datadir" --system --user-group "$app" --shell /bin/bash || \
         ynh_die "Unable to create $app system account"
 
 #=================================================
@@ -119,7 +121,6 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Creating a data directory..."
 
-datadir=/home/$app
 ynh_app_setting_set --app=$app --key=datadir --value=$datadir
 
 mkdir -p "$datadir/avatars"

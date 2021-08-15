@@ -56,7 +56,7 @@ ynh_script_progression --message="Recreating the dedicated system user..."
 # Create the dedicated user (if not existing)
 # We can't use the official helper because we need to set the shell for the login
 test getent passwd "$app" &>/dev/null || \
-    useradd -d "$DATADIR" --system --user-group "$app" --shell /bin/bash || \
+    useradd -d "$datadir" --system --user-group "$app" --shell /bin/bash || \
         ynh_die "Unable to create $app system account"
 
 #=================================================
