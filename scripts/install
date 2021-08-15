@@ -27,9 +27,9 @@ admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
 secret_key=$(ynh_string_random)
 
-datadir=/home/$app
-
 app=$YNH_APP_INSTANCE_NAME
+
+datadir=/home/$app
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
