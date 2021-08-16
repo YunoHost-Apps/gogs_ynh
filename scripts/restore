@@ -33,8 +33,6 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_user=$db_name
 datadir=$(ynh_app_setting_get --app=$app --key=datadir)
-dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
-admin=$(ynh_app_setting_get "$app" admin)
 
 #=================================================
 # CHECK IF THE APP CAN BE RESTORED
@@ -134,6 +132,10 @@ ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$ap
 # RESTORE THE LOGROTATE CONFIGURATION
 #=================================================
 ynh_script_progression --message="Restoring the logrotate configuration..."
+
+mkdir -p "/var/log/$app"
+chown -R $app:$app "/var/log/$app"
+chmod u=rwX,g=rX,o= "/var/log/$app"
 
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
