@@ -114,9 +114,9 @@ ynh_script_progression --message="Adding a configuration file..."
 
 if [ $is_public -eq 1 ]
 then
-    private_mode="false"
+	private_mode="false"
 else
-    private_mode="true"
+	private_mode="true"
 fi
 
 ynh_add_config --template="../conf/app.ini" --destination="$final_path/custom/conf/app.ini"
@@ -130,7 +130,7 @@ ynh_add_config --template="../conf/ldap.conf" --destination="$final_path/custom/
 ynh_script_progression --message="Starting a systemd service..."
 
 # Start a systemd service
-ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log" --line_match="INFO] Listen: http://0.0.0.0:"
 
 #=================================================
 # RELOAD NGINX

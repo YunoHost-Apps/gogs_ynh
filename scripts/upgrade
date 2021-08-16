@@ -40,6 +40,7 @@ ynh_script_progression --message="Backing up the app before upgrading (may take 
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
+	ynh_clean_check_starting
 	# Restore it if the upgrade fails
 	ynh_restore_upgradebackup
 }
@@ -71,8 +72,8 @@ fi
 
 if [[ $port == "" ]]
 then
-    port=$(ynh_find_port 6000)
-    ynh_app_setting_set $app web_port $port
+	port=$(ynh_find_port 6000)
+	ynh_app_setting_set $app web_port $port
 fi
 
 # handle upgrade from old package installation
@@ -81,19 +82,19 @@ fi
 # this code will be removed in the future
 if [ -d "/etc/gogs" ]
 then
-    # create needed directories if not already created
-    create_dir
+	# create needed directories if not already created
+	create_dir
 
-    # move repositories to new dir
-    old_repo_path=$(ynh_app_setting_get "$app" repopath)
-    mv "${old_repo_path:-/home/yunohost.app/gogs}"/* "$REPO_PATH" || true # Avoid if the directory is empty
-    # cleanup old dir and conf
-    ynh_secure_remove /opt/gogs
-    ynh_secure_remove /etc/gogs
-    ynh_secure_remove /opt/gogs_src
-    
-    # create needed directories if not already created
-    create_dir
+	# move repositories to new dir
+	old_repo_path=$(ynh_app_setting_get "$app" repopath)
+	mv "${old_repo_path:-/home/yunohost.app/gogs}"/* "$REPO_PATH" || true # Avoid if the directory is empty
+	# cleanup old dir and conf
+	ynh_secure_remove /opt/gogs
+	ynh_secure_remove /etc/gogs
+	ynh_secure_remove /opt/gogs_src
+	
+	# create needed directories if not already created
+	create_dir
 fi
 # end of old package upgrade
 
@@ -101,14 +102,14 @@ fi
 # if it's blocked, unlock it to allow ssh usage with git
 if [[ $(grep "$app" /etc/shadow | cut -d: -f2) == '!' ]]
 then
-    usermod -p '*' "$app"
+	usermod -p '*' "$app"
 fi
 
 # Remove old authentification mecanisme, actually the registry in the database has been replaced by a config file
 if [[ ! -e "$final_path/custom/conf/auth.d/ldap.conf" ]]
 then
-    ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname"  <<< "DELETE FROM login_source WHERE name = 'Yunohost LDAP';"
-    mkdir -p "$final_path/custom/conf/auth.d"
+	ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname"  <<< "DELETE FROM login_source WHERE name = 'Yunohost LDAP';"
+	mkdir -p "$final_path/custom/conf/auth.d"
 fi
 
 # Clean template to fix issue : https://github.com/gogits/gogs/issues/4585
@@ -125,13 +126,12 @@ then
 	ynh_script_progression --message="Upgrading source files..."
 
 	architecture=$(ynh_detect_arch)
-    # Download, check integrity, uncompress and patch the source from app.src
+	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 fi
 
-mkdir -p "$final_path/data"
 mkdir -p "$final_path/custom/conf/auth.d"
-    
+	
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:$app "$final_path"
@@ -153,9 +153,9 @@ ynh_add_nginx_config
 ynh_script_progression --message="Updating a configuration file..."
 if [ $is_public -eq 1 ]
 then
-    private_mode="false"
+	private_mode="false"
 else
-    private_mode="true"
+	private_mode="true"
 fi
 
 ynh_add_config --template="../conf/app.ini" --destination="$final_path/custom/conf/app.ini"
@@ -184,13 +184,14 @@ ynh_use_logrotate --non-append
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --log="/var/log/$app/$app.log"
+yunohost service add $app --description="$app daemon" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
-ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+
+ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log" --line_match="INFO] Listen: http://0.0.0.0:"
 
 #=================================================
 # RELOAD NGINX
