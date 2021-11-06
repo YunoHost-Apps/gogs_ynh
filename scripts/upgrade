@@ -27,24 +27,14 @@ db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 port=$(ynh_app_setting_get --app=$app --key=port)
 architecture=$(ynh_detect_arch)
+datadir=$(ynh_app_setting_get --app=$app --key=datadir)
+
 
 #=================================================
 # CHECK VERSION
 #=================================================
 
 upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -59,6 +49,18 @@ ynh_clean_setup () {
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
+
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
+
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
+
+	ynh_app_setting_delete --app=$app --key=is_public
+fi
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -82,7 +84,7 @@ ynh_secure_remove --file="/opt/$app/templates"
 ynh_script_progression --message="Setting up source files..." --weight=3
 
 REPO_PATH="/home/$app/repositories"
-DATA_PATH="/home/$app/data"
+DATA_PATH="$datadir/data"
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
@@ -105,7 +107,8 @@ fi
 
 ynh_replace_string --match_string="__REPOS_PATH__" --replace_string="$REPO_PATH" --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_user" --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__KEY__" --replace_string="$(ynh_string_random)" --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DATA_PATH__" --replace_string="$DATA_PATH" --target_file="$final_path/custom/conf/app.ini"
@@ -140,14 +143,14 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..." -
 ynh_add_nginx_config
 
 #=================================================
-# SECURE FILES AND DIRECTORIES
+# GENERIC FINALIZATION
 #=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Configuring log rotation..." --weight=1
 
-# Set permissions to app files
-chown -R $app:$app "/home/$app"
-chown -R $app:$app "/var/log/$app"
-chmod u=rwX,g=rX,o= "/home/$app"
-chmod u=rwX,g=rX,o= "/var/log/$app"
+# Use logrotate to manage application logfile(s)
+ynh_use_logrotate
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST

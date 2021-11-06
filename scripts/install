@@ -96,22 +96,27 @@ chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
 
 #=================================================
-# CREAT DIRECTORIES
+# CREATE DATA DIRECTORY
 #=================================================
+ynh_script_progression --message="Creating a data directory..." --weight=1
 
-mkdir -p "/home/$app"
+datadir=/home/yunohost.app/$app
+ynh_app_setting_set --app=$app --key=datadir --value=$datadir
 
-DATADIR="/home/$app"
+mkdir -p $datadir
+
+chmod 750 "$datadir"
+chmod -R o-rwx "$datadir"
+chown -R $app:www-data "$datadir"
 
 REPO_PATH="/home/$app/repositories"
-DATA_PATH="/home/$app/data"
+DATA_PATH="/home/yunohost.app/$app/data"
 
 # create needed directories
 mkdir -p "$final_path/data"
 mkdir -p "$final_path/custom/conf/auth.d"
-mkdir -p "/home/$app/data/avatars"
-mkdir -p "/home/$app/data/attachments"
-mkdir -p "/var/log/$app"
+mkdir -p "/home/yunohost.app/$app/data/avatars"
+mkdir -p "/home/yunohost.app/$app/data/attachments"
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -138,7 +143,8 @@ fi
 
 ynh_replace_string --match_string="__REPOS_PATH__" --replace_string="$REPO_PATH" --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_user" --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$final_path/custom/conf/app.ini"
+ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__KEY__" --replace_string="$(ynh_string_random)" --target_file="$final_path/custom/conf/app.ini"
 ynh_replace_string --match_string="__DATA_PATH__" --replace_string="$DATA_PATH" --target_file="$final_path/custom/conf/app.ini"
@@ -170,13 +176,12 @@ ynh_add_nginx_config
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
-# SECURE FILES AND DIRECTORIES
+# SETUP LOGROTATE
 #=================================================
+ynh_script_progression --message="Configuring log rotation..." --weight=1
 
-chown -R $app: "/home/$app"
-chown -R $app: "/var/log/$app"
-chmod u=rwX,g=rX,o= "/home/$app"
-chmod u=rwX,g=rX,o= "/var/log/$app"
+# Use logrotate to manage application logfile(s)
+ynh_use_logrotate
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -184,13 +189,6 @@ chmod u=rwX,g=rX,o= "/var/log/$app"
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
-
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Configuring log rotation..." --weight=1
-
-ynh_use_logrotate
 
 #=================================================
 # START SYSTEMD SERVICE
