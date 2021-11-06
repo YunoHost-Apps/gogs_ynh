@@ -1,25 +1,42 @@
 # Gogs for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)  
-[![Install Gogs with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=gogs)
-
-*[Lire ce readme en français.](./README_fr.md)*
+[![Install Gogs with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=gogs)
 
 > *This package allows you to install Gogs quickly and simply on a YunoHost server.  
 If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
 
-## Overview
-Gogs is a self-hosted Git service written in Go. Alternative to GitHub.
+> :warning: **Note that this package will not be longer be maintened by the actual maintener.
+> The idea is to migrate to [gitea](https://github.com/YunoHost-Apps/gitea_ynh) which is more featured.**
 
-**Shipped version:** 0.12.3
+## Overview
+Gogs is a self-hosted Git service written in Go. Alternative to Github.
+
+**Shipped version:** 0.11.66
 
 ## Screenshots
 
 ![](https://gogs.io/img/screenshots/2.png)
 
+
 ## Demo
 
 * [Official demo](https://try.gogs.io/user/login)
+
+For the old install you can migrate to gitea easly by juste upgrading your actuall gogs instance with the gitea source by this command:
+```
+sudo yunohost app upgrade -u https://github.com/YunoHost-Apps/gitea_ynh gogs
+```
+**Note that this command contains some risk of data lost. So it's important to make a backup of the app before the install.**
+To make a backup you can use this command:
+```
+sudo yunohost backup create --debug --apps gogs
+```
+
+For the new install just install gitea by this command:
+```
+sudo yunohost app install -l Gitea https://github.com/YunoHost-Apps/gitea_ynh
+```
 
 ## Notes on SSH usage
 If you want to use Gogs with ssh and be able to pull/push with you ssh key, your SSH daemon must be properly configured to use private/public keys. Here is a sample configuration of `/etc/ssh/sshd_config` that works with Gogs:
@@ -43,8 +60,8 @@ Host domain.tld
 
 Architecture: this package is compatible with amd64, i386 and arm. The package will try to detect it with the command uname -m and fail if it can't detect the architecture. If that happens please open an issue describing your hardware and the result of the command `uname -m`.
 
-## Private Mode
-Actually it's possible to access to the git repositories by the `git` command over http also in private mode installation. It's important to know that in this mode the repository could be ALSO getted if you don't set the repository as private in the repos settings.
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/gogs%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/gogs/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/gogs%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/gogs/)
 
 
 ## Links
