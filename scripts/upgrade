@@ -29,7 +29,6 @@ port=$(ynh_app_setting_get --app=$app --key=port)
 architecture=$(ynh_detect_arch)
 datadir=$(ynh_app_setting_get --app=$app --key=datadir)
 
-
 #=================================================
 # CHECK VERSION
 #=================================================
