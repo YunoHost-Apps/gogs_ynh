@@ -87,43 +87,43 @@ DATA_PATH="$datadir/data"
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir=$final_path --source_id="$architecture"
+ynh_setup_source --dest_dir=$final_path --source_id="$architecture" --keep="$final_path/custom/conf/app.ini $final_path/custom/conf/auth.d/ldap.conf"
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
 
-ynh_backup_if_checksum_is_different "$final_path/custom/conf/app.ini"
+#ynh_backup_if_checksum_is_different "$final_path/custom/conf/app.ini"
 
-cp ../conf/app.ini "$final_path/custom/conf"
+# cp ../conf/app.ini "$final_path/custom/conf"
 
-if [ "$path_url" = "/" ]
-then
-    ynh_replace_string --match_string="__URL__" --replace_string="$domain" --target_file="$final_path/custom/conf/app.ini"
-else
-    ynh_replace_string --match_string="__URL__" --replace_string="$domain${path_url%/}" --target_file="$final_path/custom/conf/app.ini"
-fi
+# if [ "$path_url" = "/" ]
+# then
+#     ynh_replace_string --match_string="__URL__" --replace_string="$domain" --target_file="$final_path/custom/conf/app.ini"
+# else
+#     ynh_replace_string --match_string="__URL__" --replace_string="$domain${path_url%/}" --target_file="$final_path/custom/conf/app.ini"
+# fi
 
-ynh_replace_string --match_string="__REPOS_PATH__" --replace_string="$REPO_PATH" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__KEY__" --replace_string="$(ynh_string_random)" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__DATA_PATH__" --replace_string="$DATA_PATH" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$final_path/custom/conf/app.ini"
-ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="$final_path/custom/conf/app.ini"
+# ynh_replace_string --match_string="__REPOS_PATH__" --replace_string="$REPO_PATH" --target_file="$final_path/custom/conf/app.ini"
+# ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$final_path/custom/conf/app.ini"
+# ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$final_path/custom/conf/app.ini"
+# ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$final_path/custom/conf/app.ini"
+# ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$final_path/custom/conf/app.ini"
+# ynh_replace_string --match_string="__KEY__" --replace_string="$(ynh_string_random)" --target_file="$final_path/custom/conf/app.ini"
+# ynh_replace_string --match_string="__DATA_PATH__" --replace_string="$DATA_PATH" --target_file="$final_path/custom/conf/app.ini"
+# ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$final_path/custom/conf/app.ini"
+# ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="$final_path/custom/conf/app.ini"
 
-if [[ "$is_public" = '1' ]]
-then
-    ynh_replace_string --match_string="__PRIVATE_MODE__" --replace_string="false" --target_file="$final_path/custom/conf/app.ini"
-else
-    ynh_replace_string --match_string="__PRIVATE_MODE__" --replace_string="true" --target_file="$final_path/custom/conf/app.ini"
-fi
+# if [[ "$is_public" = '1' ]]
+# then
+#     ynh_replace_string --match_string="__PRIVATE_MODE__" --replace_string="false" --target_file="$final_path/custom/conf/app.ini"
+# else
+#     ynh_replace_string --match_string="__PRIVATE_MODE__" --replace_string="true" --target_file="$final_path/custom/conf/app.ini"
+# fi
 
-ynh_add_config --template="../conf/ldap.conf" --destination="$final_path/custom/conf/auth.d/ldap.conf"
+#ynh_add_config --template="../conf/ldap.conf" --destination="$final_path/custom/conf/auth.d/ldap.conf"
 
-ynh_store_file_checksum "$final_path/custom/conf/app.ini"
+#ynh_store_file_checksum "$final_path/custom/conf/app.ini"
 
 #=================================================
 # SETUP SYSTEMD
