@@ -8,6 +8,13 @@
     },
     "version": "0.12.3~ynh1",
     "url": "http://gogs.io",
+    "upstream": {
+        "license": "MIT",
+        "website": "http://gogs.io",
+        "demo": "https://try.gogs.io/user/login",
+        "admindoc": "https://gogs.io/docs",
+        "code": "https://github.com/gogs/gogs"
+    },
     "license": "MIT",
     "maintainer": {
         "name": "",
