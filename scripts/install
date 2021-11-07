@@ -114,6 +114,7 @@ mkdir -p "$final_path/custom/conf/auth.d"
 mkdir -p "/home/yunohost.app/$app/data/avatars"
 mkdir -p "/home/yunohost.app/$app/data/attachments"
 
+
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
@@ -178,6 +179,9 @@ ynh_script_progression --message="Configuring log rotation..." --weight=1
 
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate
+
+chown -R $app:$app "/var/log/$app"
+chmod u=rwX,g=rX,o= "/var/log/$app"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
