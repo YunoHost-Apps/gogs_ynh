@@ -11,7 +11,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 ## Vue d'ensemble
 
-Forge Git légère
+Gogs (Go Git Service) est une forge multiplateforme basée sur git écrite en Go.  Sa particularité est d’être léger et pouvant fonctionner sur carte ARM, ce qui fait qu’il est adapté à l’auto-hébergement. Gogs a une interface web similaire à celle de GitHub. 
 
 **Version incluse :** 0.12.3~ynh1
 
