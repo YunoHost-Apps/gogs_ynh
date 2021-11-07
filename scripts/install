@@ -108,14 +108,14 @@ chmod 750 "$datadir"
 chmod -R o-rwx "$datadir"
 chown -R $app:www-data "$datadir"
 
-REPO_PATH="/home/yunohost.app/$app/repositories"
-DATA_PATH="/home/yunohost.app/$app/data"
+REPO_PATH="$datadir/repositories"
+DATA_PATH="$datadir/data"
 
 # create needed directories
 mkdir -p "$final_path/data"
 mkdir -p "$final_path/custom/conf/auth.d"
-mkdir -p "/home/yunohost.app/$app/data/avatars"
-mkdir -p "/home/yunohost.app/$app/data/attachments"
+mkdir -p "$datadir/data/avatars"
+mkdir -p "$datadir/data/attachments"
 
 #=================================================
 # MODIFY A CONFIG FILE
@@ -127,7 +127,7 @@ if [ "$path_url" = "/" ]
 then
     ynh_replace_string --match_string="__URL__" --replace_string="$domain" --target_file="$final_path/custom/conf/app.ini"
 else
-    ynh_replace_string --match_string="__URL__" --replace_string="$domain${path_url%/}" --target_file="$final_path/custom/conf/app.ini"
+    ynh_replace_string --match_string="__URL__" --replace_string="$domain${path_url}" --target_file="$final_path/custom/conf/app.ini"
 fi
 
 ynh_replace_string --match_string="__REPOS_PATH__" --replace_string="$REPO_PATH" --target_file="$final_path/custom/conf/app.ini"
