@@ -17,6 +17,10 @@ Forge Git légère
 
 **Démo :** https://try.gogs.io/user/login
 
+## Captures d'écran
+
+![](./doc/screenshots/screenshot.png)
+
 ## Documentations et ressources
 
 * Site officiel de l'app : http://gogs.io

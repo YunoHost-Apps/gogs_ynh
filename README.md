@@ -21,6 +21,10 @@ Lightweight Git forge
 
 **Demo:** https://try.gogs.io/user/login
 
+## Screenshots
+
+![](./doc/screenshots/screenshot.png)
+
 ## Documentation and resources
 
 * Official app website: http://gogs.io
