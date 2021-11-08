@@ -28,7 +28,7 @@ ynh_detect_arch(){
         elif [ -n "$(uname -m | grep arm)" ]; then
 	       architecture="armv7"
         else
-	       ynh_die "Unable to detect your achitecture, please open a bug describing \
+	       ynh_die --message "Unable to detect your achitecture, please open a bug describing \
             your hardware and the result of the command \"uname -m\"." 1
         fi
         echo $architecture
