@@ -108,8 +108,8 @@ chmod 750 "$datadir"
 chmod -R o-rwx "$datadir"
 chown -R $app:www-data "$datadir"
 
-REPO_PATH="$datadir/repositories"
-DATA_PATH="$datadir/data"
+repo_path="$datadir/repositories"
+data_path="$datadir/data"
 
 # create needed directories
 mkdir -p "$final_path/data"
