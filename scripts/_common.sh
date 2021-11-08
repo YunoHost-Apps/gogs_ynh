@@ -33,8 +33,3 @@ ynh_detect_arch(){
         fi
         echo $architecture
 }
-
-#=================================================
-# DEFINE ALL COMMON FONCTIONS
-#=================================================
- 
