@@ -26,7 +26,7 @@ db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 port=$(ynh_app_setting_get --app=$app --key=port)
-architecture=$(ynh_detect_arch)
+architecture=$YNH_ARCH
 datadir=$(ynh_app_setting_get --app=$app --key=datadir)
 
 #=================================================
