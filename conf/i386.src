@@ -1,11 +1,5 @@
-SOURCE_URL=https://github.com/gogits/gogs/releases/download/v0.11.79/linux_386.zip
-SOURCE_SUM=ad1a89eb01723a4b289b7b8773fd018f78b0dad801101f27c1af0f2d649edeeb
-# (Optional) Program to check the integrity (sha256sum, md5sum...)
-# default: sha256
+SOURCE_URL=https://github.com/gogs/gogs/releases/download/v0.12.3/gogs_0.12.3_linux_386.zip
+SOURCE_SUM=bcf7a31ad61865217eca93f4d90ede15837c857accb2394782ebf4a7805e1cbc
 SOURCE_SUM_PRG=sha256sum
-# (Optional) Archive format
-# default: tar.gz
 SOURCE_FORMAT=zip
-# (Optional) Put false if sources are directly in the archive root
-# default: true
 SOURCE_IN_SUBDIR=true
