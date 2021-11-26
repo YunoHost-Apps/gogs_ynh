@@ -35,6 +35,7 @@ db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 key=$(ynh_app_setting_get --app=$app --key=key)
 datadir=$(ynh_app_setting_get --app=$app --key=datadir)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
