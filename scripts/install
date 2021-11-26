@@ -103,10 +103,6 @@ ynh_app_setting_set --app=$app --key=datadir --value=$datadir
 
 mkdir -p $datadir
 
-chmod 750 "$datadir"
-chmod -R o-rwx "$datadir"
-chown -R $app:www-data "$datadir"
-
 repo_path="$datadir/repositories"
 data_path="$datadir/data"
 
@@ -115,6 +111,10 @@ mkdir -p "$final_path/data"
 mkdir -p "$final_path/custom/conf/auth.d"
 mkdir -p "$datadir/data/avatars"
 mkdir -p "$datadir/data/attachments"
+
+chmod 750 "$datadir"
+chmod -R o-rwx "$datadir"
+chown -R $app:www-data "$datadir"
 
 #=================================================
 # MODIFY A CONFIG FILE
