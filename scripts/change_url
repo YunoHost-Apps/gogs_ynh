@@ -125,7 +125,7 @@ ynh_add_config --template="../conf/app.ini" --destination="$final_path/custom/co
 chmod 400 "$final_path/custom/conf/app.ini"
 chown $app:$app "$final_path/custom/conf/app.ini"
 
-ynh_add_config --template="../conf/ldap.conf" --destination="$final_path/custom/conf/auth.d/ldap.conf"
+#ynh_add_config --template="../conf/ldap.conf" --destination="$final_path/custom/conf/auth.d/ldap.conf"
 
 #=================================================
 # GENERIC FINALISATION
