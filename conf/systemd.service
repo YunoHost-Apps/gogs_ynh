@@ -6,10 +6,10 @@ After=syslog.target network.target mysql.service slapd.service redis.service
 Type=simple
 User=__APP__
 Group=__APP__
-WorkingDirectory=/home/yunohost.app/__APP__
+WorkingDirectory=__DATADIR__
 ExecStart=__FINALPATH__/gogs web
 Restart=always
-Environment=USER=__APP__ HOME=/home/yunohost.app/__APP__
+Environment=USER=__APP__ HOME=__DATADIR__
 
 [Install]
 WantedBy=multi-user.target

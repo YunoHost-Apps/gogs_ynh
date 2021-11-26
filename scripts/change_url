@@ -35,6 +35,7 @@ db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 key=$(ynh_app_setting_get --app=$app --key=key)
 datadir=$(ynh_app_setting_get --app=$app --key=datadir)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -124,8 +125,6 @@ ynh_add_config --template="../conf/app.ini" --destination="$final_path/custom/co
 
 chmod 400 "$final_path/custom/conf/app.ini"
 chown $app:$app "$final_path/custom/conf/app.ini"
-
-ynh_add_config --template="../conf/ldap.conf" --destination="$final_path/custom/conf/auth.d/ldap.conf"
 
 #=================================================
 # GENERIC FINALISATION
