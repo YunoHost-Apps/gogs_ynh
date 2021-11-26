@@ -17,11 +17,9 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Gogs (Go Git Service) is a git-based multiplatform forge written in Go. Its particularity is that it is light and can run on an ARM card, which makes it suitable for self-hosting. Gogs has a web interface similar to that of GitHub.
 
-
 ### Features
 
 - User dashboard, user profile and activity timeline.
-- Access repositories via SSH, HTTP and HTTPS protocols.
 - User, organization and repository management.
 - Repository and organization webhooks, including Slack, Discord and Dingtalk.
 - Repository Git hooks, deploy keys and Git LFS.
@@ -29,9 +27,8 @@ Gogs (Go Git Service) is a git-based multiplatform forge written in Go. Its part
 - Migrate and mirror repositories with wiki from other code hosts.
 - Web editor for quick editing repository files and wiki.
 - Jupyter Notebook and PDF rendering.
-- Authentication via SMTP, LDAP, reverse proxy, GitHub.com and GitHub Enterprise with 2FA.
+- Authentication via SMTP, LDAP.
 - Customize HTML templates, static files and many others.
-- Rich database backend, including PostgreSQL, MySQL, SQLite3 and TiDB.
 
 
 **Shipped version:** 0.12.3~ynh1
@@ -46,7 +43,7 @@ Gogs (Go Git Service) is a git-based multiplatform forge written in Go. Its part
 
 ## Notes on SSH usage
 
-If you want to use Gogs with SSH and be able to pull/push with you ssh key, your SSH daemon must be properly configured to use private/public keys. Here is a sample configuration of `/etc/ssh/sshd_config` that works with Gogs:
+If you want to use Gogs with SSH and be able to pull/push with you SSH key, your SSH daemon must be properly configured to use private/public keys. Here is a sample configuration of `/etc/ssh/sshd_config` that works with Gogs:
 
 ```bash
 PubkeyAuthentication yes
@@ -58,7 +55,7 @@ UsePAM no
 
 You also need to add your public key to your Gogs profile.
 
-If you use ssh on another port than 22, you need to add theses lines to your ssh config in `~/.ssh/config`:
+If you use SSH on another port than 22, you need to add theses lines to your ssh config in `~/.ssh/config`:
 
 ```bash
 Host domain.tld
@@ -67,7 +64,7 @@ Host domain.tld
 
 ## Private Mode
 
-Actually it's possible to access to the Git repositories by the `git` command over http also in private mode installation. It's important to know that in this mode the repository could be ALSO getted if you don't set the repository as private in the repos settings.
+Actually it's possible to access to the Git repositories by the `git` command over HTTP also in private mode installation. It's important to know that in this mode the repository could be ALSO getted if you don't set the repository as private in the repos settings.
 
 ## Documentation and resources
 

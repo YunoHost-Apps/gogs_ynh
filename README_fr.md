@@ -26,7 +26,7 @@ Gogs (Go Git Service) est une forge multiplateforme basée sur git écrite en Go
 
 ## Notes on SSH usage
 
-If you want to use Gogs with SSH and be able to pull/push with you ssh key, your SSH daemon must be properly configured to use private/public keys. Here is a sample configuration of `/etc/ssh/sshd_config` that works with Gogs:
+If you want to use Gogs with SSH and be able to pull/push with you SSH key, your SSH daemon must be properly configured to use private/public keys. Here is a sample configuration of `/etc/ssh/sshd_config` that works with Gogs:
 
 ```bash
 PubkeyAuthentication yes
@@ -38,7 +38,7 @@ UsePAM no
 
 You also need to add your public key to your Gogs profile.
 
-If you use ssh on another port than 22, you need to add theses lines to your ssh config in `~/.ssh/config`:
+If you use SSH on another port than 22, you need to add theses lines to your ssh config in `~/.ssh/config`:
 
 ```bash
 Host domain.tld
@@ -47,7 +47,7 @@ Host domain.tld
 
 ## Private Mode
 
-Actually it's possible to access to the Git repositories by the `git` command over http also in private mode installation. It's important to know that in this mode the repository could be ALSO getted if you don't set the repository as private in the repos settings.
+Actually it's possible to access to the Git repositories by the `git` command over HTTP also in private mode installation. It's important to know that in this mode the repository could be ALSO getted if you don't set the repository as private in the repos settings.
 
 ## Documentations et ressources
 
