@@ -3,15 +3,22 @@
     "id": "gogs",
     "packaging_format": 1,
     "description": {
-        "en": "Lightweight Git forge",
-        "fr": "Forge Git légère"
+        "en": "Lightweight self-hosted Git forge",
+        "fr": "Forge Git légère auto-hébergé"
     },
+    "version": "0.12.3~ynh1",
     "url": "http://gogs.io",
+    "upstream": {
+        "license": "MIT",
+        "website": "http://gogs.io",
+        "demo": "https://try.gogs.io/user/login",
+        "admindoc": "https://gogs.io/docs",
+        "code": "https://github.com/gogs/gogs"
+    },
     "license": "MIT",
-    "version": "0.11.66~ynh2",
     "maintainer": {
-        "name": "Josué Tille",
-        "email": "josue@tille.ch"
+        "name": "",
+        "email": ""
     },
     "previous_maintainers": {
         "name": "tostaki",
@@ -23,44 +30,30 @@
         "mysql"
     ],
     "requirements": {
-        "yunohost": ">= 3.8.1"
+        "yunohost": ">= 4.3.0"
     },
     "arguments": {
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
-                "ask": {
-                    "en": "Choose a domain for Gogs",
-                    "fr": "Choisissez un domaine pour Gogs"
-                },
-                "example": "domain.org"
+                "type": "domain"
             },
             {
                 "name": "path",
                 "type": "path",
-                "ask": {
-                    "en": "Choose a path for Gogs",
-                    "fr": "Choisissez un chemin pour Gogs"
-                },
                 "example": "/gogs",
                 "default": "/gogs"
             },
             {
                 "name": "admin",
-                "type": "user",
-                "ask": {
-                    "en": "Choose the Gogs administrator (must be an existing YunoHost user)",
-                    "fr": "Choisissez l'administrateur de Gogs (doit être un utilisateur YunoHost existant)"
-                },
-                "example": "johndoe"
+                "type": "user"
             },
             {
                 "name": "is_public",
                 "type": "boolean",
-                "ask": {
-                    "en": "Is it a public site?",
-                    "fr": "Est-ce un site public ?"
+                "help": {
+                    "en": "If enabled, Gogs will be accessible by people who do not have an account. This can be changed later via the webadmin.",
+                    "fr": "Si cette case est cochée, Gogs sera accessible aux personnes n’ayant pas de compte. Vous pourrez changer ceci plus tard via la webadmin."
                 },
                 "default": true
             }

@@ -1,0 +1,5 @@
+SOURCE_URL=https://github.com/gogs/gogs/releases/download/v0.12.3/gogs_0.12.3_linux_armv7.zip
+SOURCE_SUM=9116d4f1baf6a47dc3a47cfce8f435ad77f7939f2e80323f31382913e895ab35
+SOURCE_SUM_PRG=sha256sum
+SOURCE_FORMAT=zip
+SOURCE_IN_SUBDIR=true
