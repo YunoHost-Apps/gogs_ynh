@@ -28,6 +28,7 @@ admin=$(ynh_app_setting_get --app=$app --key=admin)
 port=$(ynh_app_setting_get --app=$app --key=port)
 architecture=$YNH_ARCH
 datadir=$(ynh_app_setting_get --app=$app --key=datadir)
+key=$(ynh_app_setting_get --app=$app --key=key)
 
 #=================================================
 # CHECK VERSION
@@ -84,11 +85,29 @@ ynh_script_progression --message="Setting up source files..." --weight=3
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir=$final_path --source_id="$architecture" --keep="$final_path/custom/conf/app.ini $final_path/custom/conf/auth.d/ldap.conf"
+ynh_setup_source --dest_dir=$final_path --source_id="$architecture" #--keep="$final_path/custom/conf/app.ini $final_path/custom/conf/auth.d/ldap.conf"
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
+
+#=================================================
+# MODIFY A CONFIG FILE
+#=================================================
+
+if [ "$path_url" = "/" ]
+then
+	url="$domain"
+else
+    url="$domain${path_url%/}"
+fi
+
+ynh_add_config --template="../conf/app.ini" --destination="$final_path/custom/conf/app.ini"
+
+chmod 400 "$final_path/custom/conf/app.ini"
+chown $app:$app "$final_path/custom/conf/app.ini"
+
+ynh_add_config --template="../conf/ldap.conf" --destination="$final_path/custom/conf/auth.d/ldap.conf"
 
 #=================================================
 # SETUP SYSTEMD
