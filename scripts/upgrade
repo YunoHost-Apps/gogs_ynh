@@ -123,7 +123,7 @@ then
 else
     url="$domain${path_url%/}"
 fi
-
+mkdir -p "$final_path/custom/conf/auth.d"
 ynh_add_config --template="../conf/app.ini" --destination="$final_path/custom/conf/app.ini"
 
 chmod 400 "$final_path/custom/conf/app.ini"
