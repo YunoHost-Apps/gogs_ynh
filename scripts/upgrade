@@ -64,6 +64,7 @@ fi
 # If new datadir doesn't exist, create it
 if [ -z "/home/yunohost.app/$app" ]; then
         datadir=/home/yunohost.app/$app
+        mkdir -p $datadir
         ynh_app_setting_set --app=$app --key=datadir --value=$datadir
 
         cp -a "/home/$app/repositories" "$datadir/data/repositories"
@@ -105,7 +106,7 @@ ynh_script_progression --message="Setting up source files..." --weight=3
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir=$final_path --source_id="$architecture" #--keep="$final_path/custom/conf/app.ini $final_path/custom/conf/auth.d/ldap.conf"
+ynh_setup_source --dest_dir=$final_path --source_id="$architecture"
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
@@ -114,6 +115,7 @@ chown -R $app:www-data "$final_path"
 #=================================================
 # MODIFY A CONFIG FILE
 #=================================================
+ynh_script_progression --message="Setting up source config files..." --weight=3
 
 if [ "$path_url" = "/" ]
 then
