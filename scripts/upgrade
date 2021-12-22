@@ -55,6 +55,20 @@ ynh_abort_if_errors
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
+# If new datadir doesn't exist, create it
+if [ -z "/home/yunohost.app/$app" ]; then
+        datadir=/home/yunohost.app/$app
+        ynh_app_setting_set --app=$app --key=datadir --value=$datadir
+
+        cp -a "/home/$app/repositories" "$datadir/data/repositories"
+        cp -a "/home/$app/data/avatars" "$datadir/data/avatars"
+        cp -a "/home/$app/data/attachments" "$datadir/data/attachments"
+
+        chmod 750 "$datadir"
+		chmod -R o-rwx "$datadir"
+		chown -R $app:www-data "$datadir"
+fi
+
 # Cleaning legacy permissions
 if ynh_legacy_permissions_exists; then
 	ynh_legacy_permissions_delete_all
