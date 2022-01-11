@@ -65,8 +65,18 @@ ynh_setup_source $final_path $architecture
 # Configure gogs with app.ini file
 config_gogs
 
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_script_progression --message="Configuring a systemd service..." --weight=1
+
 # Configure init script
 ynh_add_systemd_config
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 config_nginx
@@ -89,3 +99,9 @@ ynh_use_logrotate "/var/log/$app"
 
 # Reload services
 #ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed" --last
