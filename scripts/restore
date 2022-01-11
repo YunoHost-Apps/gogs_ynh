@@ -27,10 +27,10 @@ ynh_abort_if_errors
 ynh_script_progression --message="Loading installation settings..." --weight=1
 
 # Retrieve old app settings
-domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_app_setting_get "$app" path)
-dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
-admin=$(ynh_app_setting_get "$app" adminusername)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+dbpass=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
+admin=$(ynh_app_setting_get --app=$app --key=adminusername)
 
 # Check user parameter
 ynh_user_exists "$admin" || ynh_die "The chosen admin user does not exist."
