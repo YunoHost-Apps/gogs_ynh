@@ -94,16 +94,26 @@ fi
 ynh_secure_remove "/opt/gogs/templates"
 
 # Install Gogs
-ynh_setup_source $final_path $architecture
+ynh_setup_source --dest_dir="$final_path" $architecture
 
 # Configure gogs with app.ini file
 config_gogs
 
-# Configure init script
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
+
+# Create a dedicated systemd config
 ynh_add_systemd_config
 
-# Modify Nginx configuration file and copy it to Nginx conf directory
-config_nginx
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
 
 #=================================================
 # GENERIC FINALIZATION
@@ -115,8 +125,32 @@ set_access_settings
 # Set permissions
 set_permission
 
-# Add Gogs to YunoHost's monitored services
-yunohost service add "$app" --log /var/log/"$app"/"$app".log
-
 # Reload services
-ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+#ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+
+yunohost service add $app --description="A short description of the app" --log="/var/log/$app/$app.log"
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..." --weight=1
+
+ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Upgrade of $app completed" --last

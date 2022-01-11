@@ -78,8 +78,8 @@ ynh_add_systemd_config
 #=================================================
 ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
-# Modify Nginx configuration file and copy it to Nginx conf directory
-config_nginx
+# Create a dedicated NGINX config
+ynh_add_nginx_config
 
 #=================================================
 # GENERIC FINALIZATION
@@ -91,14 +91,33 @@ set_permission
 # Unprotect root from SSO if public
 set_access_settings
 
-# Add Gogs to YunoHost's monitored services
-yunohost service add "$app" --log "/var/log/$app/$app.log"
-
 # Configure logrotate
 ynh_use_logrotate "/var/log/$app"
 
 # Reload services
 #ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
+
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+
+yunohost service add $app --description="A short description of the app" --log="/var/log/$app/$app.log"
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..." --weight=1
+
+# Start a systemd service
+ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+
+ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
