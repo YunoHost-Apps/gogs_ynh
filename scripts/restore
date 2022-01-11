@@ -29,7 +29,6 @@ ynh_script_progression --message="Loading installation settings..." --weight=1
 # Retrieve old app settings
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
-dbpass=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 admin=$(ynh_app_setting_get --app=$app --key=adminusername)
 
 # Check user parameter
@@ -51,13 +50,28 @@ test getent passwd "$app" &>/dev/null || \
 # Restore all files
 ynh_restore
 
-# Create and restore the database
-ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"
-ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ./db.sql
+#=================================================
+# RESTORE THE MYSQL DATABASE
+#=================================================
+ynh_script_progression --message="Restoring the MySQL database..." --weight=1
 
-# Restore systemd files
-systemctl daemon-reload
-systemctl enable "$app".service --quiet
+dbpass=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
+ynh_mysql_setup_db --db_user=$dbuser --db_name=$dbname --db_pwd=$dbpass
+ynh_mysql_connect_as --user=$dbuser --password=$dbpass --database=$dbname < ./db.sql
+
+#=================================================
+# RESTORE VARIOUS FILES
+#=================================================
+ynh_script_progression --message="Restoring various files..." --time --weight=1
+
+
+#=================================================
+# RESTORE SYSTEMD
+#=================================================
+ynh_script_progression --message="Restoring the systemd configuration..." --weight=1
+
+ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
+systemctl enable $app.service --quiet
 
 #=================================================
 # GENERIC FINALIZATION
@@ -69,8 +83,12 @@ set_permission
 # Configure logrotate
 ynh_use_logrotate "/var/log/$app"
 
-# Add Gogs to YunoHost's monitored services
-yunohost service add "$app" --log /var/log/"$app"/"$app".log
+#=================================================
+# RESTORE THE LOGROTATE CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the logrotate configuration..." --time --weight=1
+
+ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
