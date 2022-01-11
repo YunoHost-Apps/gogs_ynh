@@ -115,5 +115,8 @@ set_access_settings
 # Set permissions
 set_permission
 
+# Add Gogs to YunoHost's monitored services
+yunohost service add "$app" --log /var/log/"$app"/"$app".log
+
 # Reload services
 ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
