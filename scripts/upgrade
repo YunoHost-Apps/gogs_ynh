@@ -108,7 +108,7 @@ fi
 ynh_secure_remove "/opt/gogs/templates"
 
 # Install Gogs
-ynh_setup_source --dest_dir="$final_path" $architecture
+ynh_setup_source $final_path $architecture
 
 # Configure gogs with app.ini file
 config_gogs
