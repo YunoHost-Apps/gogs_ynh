@@ -28,8 +28,14 @@ ynh_clean_setup () {
     ynh_restore_upgradebackup
 }
 
-# Stop service
-systemctl stop "$app".service
+#=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
+# STOP SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Stopping a systemd service..." --weight=1
+
+ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # MIGRATION FROM OLD VERSION
@@ -125,15 +131,12 @@ set_access_settings
 # Set permissions
 set_permission
 
-# Reload services
-#ynh_check_starting "INFO] Listen: http://0.0.0.0:" "/var/log/$app/gogs.log"
-
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
-yunohost service add $app --description="A short description of the app" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
