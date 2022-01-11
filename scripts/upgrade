@@ -11,12 +11,11 @@ source /usr/share/yunohost/helpers
 ynh_abort_if_errors
 
 # Load common variables and helpers
-source ./experimental_helper.sh
 source ./_common.sh
 
 # Retrieve app settings
 domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_normalize_url_path $(ynh_app_setting_get "$app" path))
+path_url=$(ynh_app_setting_get "$app" path)
 dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
 admin=$(ynh_app_setting_get "$app" adminusername)
 key=$(ynh_app_setting_get "$app" secret_key)

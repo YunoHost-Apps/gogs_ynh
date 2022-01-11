@@ -11,7 +11,6 @@ source /usr/share/yunohost/helpers
 ynh_abort_if_errors
 
 # Load common variables and helpers
-source ../settings/scripts/experimental_helper.sh
 source ../settings/scripts/_common.sh
 
 # Retrieve old app settings
@@ -20,12 +19,8 @@ path_url=$(ynh_app_setting_get "$app" path)
 dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
 admin=$(ynh_app_setting_get "$app" adminusername)
 
-# Check domain/path availability with app helper
-ynh_webpath_available $domain $path_url || ynh_die "$domain is not available as domain, please use an other domain."
-
 # Check user parameter
-ynh_user_exists "$admin" \
-  || ynh_die "The chosen admin user does not exist."
+ynh_user_exists "$admin" || ynh_die "The chosen admin user does not exist."
 
 # Check Final Path availability
 test ! -e "$final_path" || ynh_die "This path already contains a folder"
@@ -49,7 +44,7 @@ ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ./db.sql
 
 # Restore systemd files
 systemctl daemon-reload
-systemctl enable "$app".service
+systemctl enable "$app".service --quiet
 
 #=================================================
 # GENERIC FINALIZATION

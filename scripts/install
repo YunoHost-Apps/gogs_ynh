@@ -11,17 +11,15 @@ source /usr/share/yunohost/helpers
 ynh_abort_if_errors
 
 # Load common variables and helpers
-source ./experimental_helper.sh
 source ./_common.sh
 
 # Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
-path_url=$(ynh_normalize_url_path $YNH_APP_ARG_PATH)
+path_url=$YNH_APP_ARG_PATH
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
 
 # Check domain/path availability
-ynh_webpath_available $domain $path_url || ynh_die "$domain is not available as domain, please use an other domain."
 ynh_webpath_register $app $domain $path_url
 
 # Check user parameter
