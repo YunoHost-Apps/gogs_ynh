@@ -129,7 +129,12 @@ ynh_add_nginx_config
 set_access_settings
 
 # Set permissions
-set_permission
+chown -R $app:$app "$final_path"
+chown -R $app:$app "/home/$app"
+chown -R $app:$app "/var/log/$app"
+chmod u=rwX,g=rX,o= "$final_path"
+chmod u=rwX,g=rX,o= "/home/$app"
+chmod u=rwX,g=rX,o= "/var/log/$app"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
