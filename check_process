@@ -15,7 +15,7 @@
         upgrade=1   from_commit=aa075b2051ffad7b0b6fef3a9c767376d5bdbfab
         upgrade=1   from_commit=1cbec051e1171de5a8ed1e850eb4fb3506114da5
         upgrade=1   from_commit=5a706ed246392c1ce39c47a648cb93e2996e80d3
-        upgrade=1   from_commit=
+        upgrade=1   from_commit=f572b5941b0e6833fb32a0132ac8d3692742924f
         backup_restore=1
         multi_instance=1
         incorrect_path=0
@@ -28,6 +28,5 @@
 		name=From V0.10.18
 	; commit=5a706ed246392c1ce39c47a648cb93e2996e80d3
 		name=The oldest package
-
-    ; commit=
+    ; commit=f572b5941b0e6833fb32a0132ac8d3692742924f
         name=0.11.79
