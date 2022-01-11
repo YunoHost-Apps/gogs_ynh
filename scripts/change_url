@@ -107,6 +107,7 @@ fi
 # SPECIFIC MODIFICATIONS
 #=================================================
 
+path_url=$new_path
 # Update gogs config
 config_gogs
 
