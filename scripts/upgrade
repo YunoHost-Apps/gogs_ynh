@@ -3,24 +3,24 @@
 #=================================================
 # GENERIC START
 #=================================================
-
 # IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
 source /usr/share/yunohost/helpers
 
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#=================================================
+# LOAD SETTINGS
+#=================================================
+ynh_script_progression --message="Loading installation settings..." --weight=1
 
-# Load common variables and helpers
-source ./_common.sh
-
-# Retrieve app settings
-domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_app_setting_get "$app" path)
-dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
-admin=$(ynh_app_setting_get "$app" adminusername)
-key=$(ynh_app_setting_get "$app" secret_key)
-is_public=$(ynh_app_setting_get "$app" is_public)
-port=$(ynh_app_setting_get "$app" web_port)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+dbpass=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
+admin=$(ynh_app_setting_get --app=$app --key=adminusername)
+key=$(ynh_app_setting_get --app=$app --key=secret_key)
+is_public=$(ynh_app_setting_get --app=$app --key=is_public)
+port=$(ynh_app_setting_get --app=$app --key=web_port)
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
