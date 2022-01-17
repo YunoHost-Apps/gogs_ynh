@@ -6,7 +6,7 @@
         "en": "Lightweight self-hosted Git forge",
         "fr": "Forge Git légère auto-hébergé"
     },
-    "version": "0.12.3~ynh1",
+    "version": "0.12.4~ynh1",
     "url": "http://gogs.io",
     "upstream": {
         "license": "MIT",
@@ -33,7 +33,7 @@
         "yunohost": ">= 4.3.0"
     },
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
                 "type": "domain"
