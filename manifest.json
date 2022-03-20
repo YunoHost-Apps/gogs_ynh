@@ -6,7 +6,7 @@
         "en": "Lightweight self-hosted Git forge",
         "fr": "Forge Git légère auto-hébergé"
     },
-    "version": "0.12.5~ynh1",
+    "version": "0.12.6~ynh1",
     "url": "http://gogs.io",
     "upstream": {
         "license": "MIT",
