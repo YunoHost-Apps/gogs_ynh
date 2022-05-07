@@ -70,13 +70,6 @@ ynh_script_progression --message="Stopping a systemd service..." --weight=2
 ynh_systemd_action --service_name=$app --action="stop" --log_path="systemd"
 
 #=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
-
-# Clean template to fix issue : https://github.com/gogits/gogs/issues/4585
-ynh_secure_remove --file="$final_path/templates"
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=3
