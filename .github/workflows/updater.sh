@@ -69,6 +69,9 @@ case $asset_url in
   *"gogs_"*"_linux_amd64.tar.gz")
     src="amd64"
     ;;
+  *"gogs_"*"_linux_armv8.tar.gz")
+    src="arm64"
+    ;;
   *"gogs_"*"_linux_armv7.tar.gz")
     src="armhf"
     ;;
