@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/gogs/gogs/releases/download/v0.12.7/gogs_0.12.7_linux_386.tar.gz
-SOURCE_SUM=d7cfc8685f685739b65519eb44b81640d1f11fba3fb78b55a63c131ec094fe75
+SOURCE_URL=https://github.com/gogs/gogs/releases/download/v0.12.8/gogs_0.12.8_linux_386.tar.gz
+SOURCE_SUM=dabe858026d1166d254fe84b4a5711eb6208ab6a1aa5a3d2742f9b920d8ac3bc
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
