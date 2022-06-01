@@ -5,7 +5,7 @@ It shall NOT be edited by hand.
 
 # Gogs for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![Working status](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)  
 [![Install Gogs with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=gogs)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -31,13 +31,13 @@ Gogs (Go Git Service) is a git-based multiplatform forge written in Go. Its part
 - Customize HTML templates, static files and many others.
 
 
-**Shipped version:** 0.12.7~ynh1
+**Shipped version:** 0.12.8~ynh1
 
 **Demo:** https://try.gogs.io/user/login
 
 ## Screenshots
 
-![](./doc/screenshots/screenshot.png)
+![Screenshot of Gogs](./doc/screenshots/screenshot.png)
 
 ## Disclaimers / important information
 
@@ -68,21 +68,22 @@ Actually it's possible to access to the Git repositories by the `git` command ov
 
 ## Documentation and resources
 
-* Official app website: http://gogs.io
-* Official admin documentation: https://gogs.io/docs
-* Upstream app code repository: https://github.com/gogs/gogs
-* YunoHost documentation for this app: https://yunohost.org/app_gogs
-* Report a bug: https://github.com/YunoHost-Apps/gogs_ynh/issues
+* Official app website: <http://gogs.io>
+* Official admin documentation: <https://gogs.io/docs>
+* Upstream app code repository: <https://github.com/gogs/gogs>
+* YunoHost documentation for this app: <https://yunohost.org/app_gogs>
+* Report a bug: <https://github.com/YunoHost-Apps/gogs_ynh/issues>
 
 ## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/gogs_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
-```
+
+``` bash
 sudo yunohost app install https://github.com/YunoHost-Apps/gogs_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade gogs -u https://github.com/YunoHost-Apps/gogs_ynh/tree/testing --debug
 ```
 
-**More info regarding app packaging:** https://yunohost.org/packaging_apps
+**More info regarding app packaging:** <https://yunohost.org/packaging_apps>
