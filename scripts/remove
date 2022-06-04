@@ -71,8 +71,6 @@ then
   ynh_secure_remove --file="$datadir"
 fi
 
-ynh_secure_remove --file="/var/log/$app"
-
 #=================================================
 # REMOVE LOGROTATE CONFIGURATION
 #=================================================
@@ -88,6 +86,13 @@ ynh_script_progression --message="Removing NGINX web server configuration..." --
 
 # Remove the dedicated NGINX config
 ynh_remove_nginx_config
+
+#=================================================
+# REMOVE VARIOUS FILES
+#=================================================
+ynh_script_progression --message="Removing various files..." --weight=1
+
+ynh_secure_remove --file="/var/log/$app"
 
 #=================================================
 # REMOVE DEDICATED USER

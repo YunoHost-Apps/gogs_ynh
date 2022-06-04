@@ -66,13 +66,16 @@ echo "Handling asset at $asset_url"
 # Here we base the source file name upon a unique keyword in the assets url (admin vs. update)
 # Leave $src empty to ignore the asset
 case $asset_url in
-  *"gogs_"*"_linux_amd64.zip")
+  *"gogs_"*"_linux_amd64.tar.gz")
     src="amd64"
     ;;
-  *"gogs_"*"_linux_armv7.zip")
+  *"gogs_"*"_linux_armv8.tar.gz")
+    src="arm64"
+    ;;
+  *"gogs_"*"_linux_armv7.tar.gz")
     src="armhf"
     ;;
-  *"gogs_"*"_linux_386.zip")
+  *"gogs_"*"_linux_386.tar.gz")
     src="i386"
     ;;
 esac

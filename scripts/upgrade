@@ -26,7 +26,6 @@ db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 port=$(ynh_app_setting_get --app=$app --key=port)
-architecture=$YNH_ARCH
 datadir=$(ynh_app_setting_get --app=$app --key=datadir)
 key=$(ynh_app_setting_get --app=$app --key=key)
 
@@ -96,14 +95,7 @@ fi
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..." --weight=2
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app/$app.log"
-
-#=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
-
-# Clean template to fix issue : https://github.com/gogits/gogs/issues/4585
-#ynh_secure_remove --file="$final_path/templates"
+ynh_systemd_action --service_name=$app --action="stop" --log_path="systemd"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -112,7 +104,7 @@ ynh_script_progression --message="Setting up source files..." --weight=3
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir=$final_path --source_id="$architecture"
+ynh_setup_source --dest_dir=$final_path --source_id=$YNH_ARCH --keep="$final_path/custom/conf/app.ini $final_path/custom/conf/auth.d/ldap.conf"
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
