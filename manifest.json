@@ -13,7 +13,8 @@
         "website": "http://gogs.io",
         "demo": "https://try.gogs.io/user/login",
         "admindoc": "https://gogs.io/docs",
-        "code": "https://github.com/gogs/gogs"
+        "code": "https://github.com/gogs/gogs",
+        "cpe": "cpe:2.3:a:gogs:gogs"
     },
     "license": "MIT",
     "maintainer": {
