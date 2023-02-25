@@ -31,7 +31,6 @@ ynh_script_progression --message="Setting up source files..." --weight=3
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir=$install_dir --source_id=$YNH_ARCH
 
-chmod 750 "$install_dir"
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
@@ -54,7 +53,6 @@ mkdir -p "$data_dir/data/repositories"
 mkdir -p "$data_dir/data/avatars"
 mkdir -p "$data_dir/data/attachments"
 
-chmod 750 "$data_dir"
 chmod -R o-rwx "$data_dir"
 chown -R $app:www-data "$data_dir"
 
