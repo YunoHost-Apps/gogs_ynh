@@ -5,27 +5,27 @@ It shall NOT be edited by hand.
 
 # Gogs pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)
+
 [![Installer Gogs avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=gogs)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Gogs rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Gogs rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 Gogs (Go Git Service) est une forge multiplateforme basée sur git écrite en Go. Sa particularité est d’être léger et pouvant fonctionner sur carte ARM, ce qui fait qu’il est adapté à l’auto-hébergement. Gogs a une interface web similaire à celle de GitHub. 
 
 
-**Version incluse :** 0.12.10~ynh1
-
+**Version incluse :** 0.12.10~ynh1
 
 **Démo :** https://try.gogs.io/user/login
 
-## Captures d'écran
+## Captures d’écran
 
-![Capture d'écran de Gogs](./doc/screenshots/screenshot.png)
+![Capture d’écran de Gogs](./doc/screenshots/screenshot.png)
 
 ## Avertissements / informations importantes
 
@@ -56,9 +56,9 @@ Actually it's possible to access to the Git repositories by the `git` command ov
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <http://gogs.io>
-* Documentation officielle de l'admin : <https://gogs.io/docs>
-* Dépôt de code officiel de l'app : <https://github.com/gogs/gogs>
+* Site officiel de l’app : <http://gogs.io>
+* Documentation officielle de l’admin : <https://gogs.io/docs>
+* Dépôt de code officiel de l’app : <https://github.com/gogs/gogs>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_gogs>
 * Signaler un bug : <https://github.com/YunoHost-Apps/gogs_ynh/issues>
 
@@ -74,4 +74,4 @@ ou
 sudo yunohost app upgrade gogs -u https://github.com/YunoHost-Apps/gogs_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
