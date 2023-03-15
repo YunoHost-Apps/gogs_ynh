@@ -44,6 +44,18 @@ ram.runtime = "50M"
     default = "visitors"
 
 [resources]
+
+ [resources.sources]
+    [resources.sources.main]
+    amd64.url = "https://github.com/gogs/gogs/releases/download/v0.13.0/gogs_0.13.0_linux_amd64.tar.gz"
+    amd64.sha256 = "75da1c026cacb187a7c1dcad8263873ec566ce30cc0df56dd1dc129b8292d34f"
+    arm64.url = "https://github.com/gogs/gogs/releases/download/v0.13.0/gogs_0.13.0_linux_armv8.tar.gz"
+    arm64.sha256 = "3a8401ed3f9f9b73708c682f9b3211401dec01d3ce36294655b9394c28eab2e1"
+    armhf.url = "https://github.com/gogs/gogs/releases/download/v0.13.0/gogs_0.13.0_linux_armv7.tar.gz"
+    armhf.sha256 = "816e753719fc920e5df5f43b98e31db04d8e5e8c3b49cab662ad69852e2a8863"
+    i386.url = "https://github.com/gogs/gogs/releases/download/v0.13.0/gogs_0.13.0_linux_386.tar.gz"
+    i386.sha256 = "c4ddd0c9f1d9216ff15e0fbcb53f9da0999d0a3e84b2e270601aa86c8ff6f00c"
+
     [resources.port]
 
     [resources.system_user]
