@@ -20,8 +20,8 @@ code = "https://github.com/gogs/gogs"
 yunohost = ">= 11.1.15"
 architectures = "all"
 multi_instance = true
-ldap = "true"
-sso = "true"
+ldap = true
+sso = true
 disk = "50M"
 ram.build = "50M"
 ram.runtime = "50M"
