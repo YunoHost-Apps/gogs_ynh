@@ -1,5 +1,5 @@
 [Unit]
-Description=Gogs (Go Git Service)
+Description=Gogs: Go Git Service
 After=syslog.target network.target mysql.service slapd.service redis.service
 
 [Service]
