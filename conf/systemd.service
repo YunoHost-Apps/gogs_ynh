@@ -1,15 +1,15 @@
 [Unit]
-Description=Gogs (Go Git Service)
+Description=Gogs: Go Git Service
 After=syslog.target network.target mysql.service slapd.service redis.service
 
 [Service]
 Type=simple
 User=__APP__
 Group=__APP__
-WorkingDirectory=__DATADIR__
-ExecStart=__FINALPATH__/gogs web
+WorkingDirectory=__DATA_DIR__
+ExecStart=__INSTALL_DIR__/gogs web
 Restart=always
-Environment=USER=__APP__ HOME=__DATADIR__
+Environment=USER=__APP__ HOME=__DATA_DIR__
 
 [Install]
 WantedBy=multi-user.target

@@ -1,5 +1,0 @@
-SOURCE_URL=https://github.com/gogs/gogs/releases/download/v0.13.0/gogs_0.13.0_windows_amd64_mws.zip
-SOURCE_SUM=4323c6cba1aa522642772e051fb9e63df02566af93a7b85294a458a520bbc1eb
-SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=zip
-SOURCE_IN_SUBDIR=true
