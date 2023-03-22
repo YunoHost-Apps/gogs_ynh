@@ -56,7 +56,7 @@ ram.runtime = "50M"
     i386.url = "https://github.com/gogs/gogs/releases/download/v0.13.0/gogs_0.13.0_linux_386.tar.gz"
     i386.sha256 = "c4ddd0c9f1d9216ff15e0fbcb53f9da0999d0a3e84b2e270601aa86c8ff6f00c"
 
-    [resources.port]
+    [resources.ports]
 
     [resources.system_user]
 
