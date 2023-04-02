@@ -17,7 +17,7 @@ admindoc = "https://gogs.io/docs"
 code = "https://github.com/gogs/gogs"
 
 [integration]
-yunohost = ">= 11.1.15"
+yunohost = ">= 11.1.16"
 architectures = "all"
 multi_instance = true
 ldap = true
@@ -56,6 +56,12 @@ ram.runtime = "50M"
     i386.url = "https://github.com/gogs/gogs/releases/download/v0.13.0/gogs_0.13.0_linux_386.tar.gz"
     i386.sha256 = "c4ddd0c9f1d9216ff15e0fbcb53f9da0999d0a3e84b2e270601aa86c8ff6f00c"
 
+    autoupdate.strategy = "latest_github_release"
+    autoupdate.asset.amd64 = "gogs_*_linux_amd64.tar.gz"
+    autoupdate.asset.arm64 = "gogs_*_linux_armv8.tar.gz"
+    autoupdate.asset.i386 = "gogs_*_linux_386.tar.gz"
+    autoupdate.asset.armhf = "gogs_*_linux_armv7.tar.gz"
+
     [resources.ports]
 
     [resources.system_user]
@@ -63,6 +69,7 @@ ram.runtime = "50M"
     [resources.install_dir]
 
     [resources.data_dir]
+    subdirs = ["data/repositories", "data/avatars", "data/attachments"]
 
     [resources.permissions]
     main.url = "/"
