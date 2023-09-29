@@ -5,7 +5,7 @@ name = "Gogs"
 description.en = "Lightweight self-hosted Git forge"
 description.fr = "Forge Git légère auto-hébergé"
 
-version = "0.13.0~ynh2"
+version = "0.13.0~ynh3"
 
 maintainers = []
 
