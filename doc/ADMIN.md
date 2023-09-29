@@ -12,7 +12,7 @@ UsePAM no
 
 You also need to add your public key to your Gogs profile.
 
-If you use SSH on another port than 22, you need to add theses lines to your ssh config in `~/.ssh/config`:
+If you use SSH on another port than 22, you need to add theses lines to your SSH config in `~/.ssh/config`:
 
 ```bash
 Host domain.tld

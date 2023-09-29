@@ -5,7 +5,7 @@ name = "Gogs"
 description.en = "Lightweight self-hosted Git forge"
 description.fr = "Forge Git légère auto-hébergé"
 
-version = "0.13.0~ynh2"
+version = "0.13.0~ynh3"
 
 maintainers = []
 
@@ -17,7 +17,7 @@ admindoc = "https://gogs.io/docs"
 code = "https://github.com/gogs/gogs"
 
 [integration]
-yunohost = ">= 11.1.17"
+yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
 ldap = true
@@ -38,8 +38,6 @@ ram.runtime = "50M"
     type = "user"
 
     [install.init_main_permission]
-    help.en = "If enabled, Gogs will be accessible by people who do not have an account. This can be changed later via the webadmin."
-    help.fr = "Si cette case est cochée, Gogs sera accessible aux personnes n’ayant pas de compte. Vous pourrez changer ceci plus tard via la webadmin."
     type = "group"
     default = "visitors"
 
@@ -57,10 +55,10 @@ ram.runtime = "50M"
     i386.sha256 = "c4ddd0c9f1d9216ff15e0fbcb53f9da0999d0a3e84b2e270601aa86c8ff6f00c"
 
     autoupdate.strategy = "latest_github_release"
-    autoupdate.asset.amd64 = "gogs_*_linux_amd64.tar.gz"
-    autoupdate.asset.arm64 = "gogs_*_linux_armv8.tar.gz"
-    autoupdate.asset.i386 = "gogs_*_linux_386.tar.gz"
-    autoupdate.asset.armhf = "gogs_*_linux_armv7.tar.gz"
+    autoupdate.asset.amd64 = "gogs_.*_linux_amd64.tar.gz"
+    autoupdate.asset.arm64 = "gogs_.*_linux_armv8.tar.gz"
+    autoupdate.asset.i386 = "gogs_.*_linux_386.tar.gz"
+    autoupdate.asset.armhf = "gogs_.*_linux_armv7.tar.gz"
 
     [resources.ports]
 

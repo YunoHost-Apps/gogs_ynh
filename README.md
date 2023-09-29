@@ -30,7 +30,7 @@ Gogs (Go Git Service) is a git-based multiplatform forge written in Go. Its part
 - Authentication via SMTP, LDAP.
 
 
-**Shipped version:** 0.13.0~ynh2
+**Shipped version:** 0.13.0~ynh3
 
 **Demo:** https://try.gogs.io/user/login
 
@@ -43,7 +43,6 @@ Gogs (Go Git Service) is a git-based multiplatform forge written in Go. Its part
 * Official app website: <http://gogs.io>
 * Official admin documentation: <https://gogs.io/docs>
 * Upstream app code repository: <https://github.com/gogs/gogs>
-* YunoHost documentation for this app: <https://yunohost.org/app_gogs>
 * Report a bug: <https://github.com/YunoHost-Apps/gogs_ynh/issues>
 
 ## Developer info
