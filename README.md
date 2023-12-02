@@ -43,6 +43,7 @@ Gogs (Go Git Service) is a git-based multiplatform forge written in Go. Its part
 * Official app website: <http://gogs.io>
 * Official admin documentation: <https://gogs.io/docs>
 * Upstream app code repository: <https://github.com/gogs/gogs>
+* YunoHost Store: <https://apps.yunohost.org/app/gogs>
 * Report a bug: <https://github.com/YunoHost-Apps/gogs_ynh/issues>
 
 ## Developer info
