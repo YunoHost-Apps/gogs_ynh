@@ -42,12 +42,12 @@ else
     url="$domain${path%/}"
 fi
 
-ynh_add_config --template="../conf/app.ini" --destination="$install_dir/custom/conf/app.ini"
+ynh_add_config --template="app.ini" --destination="$install_dir/custom/conf/app.ini"
 
 chmod 400 "$install_dir/custom/conf/app.ini"
 chown $app:$app "$install_dir/custom/conf/app.ini"
 
-ynh_add_config --template="../conf/ldap.conf" --destination="$install_dir/custom/conf/auth.d/ldap.conf"
+ynh_add_config --template="ldap.conf" --destination="$install_dir/custom/conf/auth.d/ldap.conf"
 
 #=================================================
 # SETUP SYSTEMD
