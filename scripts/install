@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -13,7 +7,6 @@ source /usr/share/yunohost/helpers
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-# Retrieve arguments
 key=$(ynh_string_random)
 ynh_app_setting_set --app=$app --key=key --value=$key
 
@@ -22,7 +15,6 @@ ynh_app_setting_set --app=$app --key=key --value=$key
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=3
 
-# Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir=$install_dir
 
 mkdir -p "$install_dir/custom/conf/auth.d"
@@ -54,13 +46,10 @@ ynh_add_config --template="ldap.conf" --destination="$install_dir/custom/conf/au
 #=================================================
 ynh_script_progression --message="Configuring a systemd service..." --weight=1
 
-# Configure init script
 ynh_add_systemd_config
 
-# Create a dedicated NGINX config
 ynh_add_nginx_config
 
-# Use logrotate to manage application logfile(s)
 ynh_use_logrotate
 
 chown -R $app:$app "/var/log/$app"
@@ -73,7 +62,6 @@ yunohost service add $app --description="Lightweight Git forge" --log="/var/log/
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=3
 
-# Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
 
 #=================================================
