@@ -5,7 +5,7 @@ NON debe editarse manualmente.
 
 # Gogs para YunoHost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)
+[![Nivel de integración](https://dash.yunohost.org/integration/gogs.svg)](https://ci-apps.yunohost.org/ci/apps/gogs/) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)
 
 [![Instalar Gogs con YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=gogs)
 
