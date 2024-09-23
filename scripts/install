@@ -19,8 +19,6 @@ ynh_setup_source --dest_dir=$install_dir
 
 mkdir -p "$install_dir/custom/conf/auth.d"
 
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
@@ -50,9 +48,6 @@ ynh_config_add_systemd
 ynh_config_add_nginx
 
 ynh_config_add_logrotate
-
-#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:$app "/var/log/$app"
-#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod u=rwX,g=rX,o= "/var/log/$app"
 
 yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
 

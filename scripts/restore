@@ -10,8 +10,6 @@ ynh_script_progression "Restoring $app main directory..."
 
 ynh_restore "$install_dir"
 
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
 #=================================================
 # RESTORE THE DATA DIRECTORY
 #=================================================
@@ -41,8 +39,6 @@ systemctl enable $app.service --quiet
 ynh_restore "/etc/logrotate.d/$app"
 
 ynh_restore "/var/log/$app"
-#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:$app "/var/log/$app"
-#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod u=rwX,g=rX,o= "/var/log/$app"
 
 yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
 
