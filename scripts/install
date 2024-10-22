@@ -33,9 +33,6 @@ fi
 
 ynh_config_add --template="app.ini" --destination="$install_dir/custom/conf/app.ini"
 
-chmod 400 "$install_dir/custom/conf/app.ini"
-chown $app:$app "$install_dir/custom/conf/app.ini"
-
 ynh_config_add --template="ldap.conf" --destination="$install_dir/custom/conf/auth.d/ldap.conf"
 
 #=================================================
