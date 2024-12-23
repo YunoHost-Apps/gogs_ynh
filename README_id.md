@@ -5,7 +5,9 @@ Ini TIDAK boleh diedit dengan tangan.
 
 # Gogs untuk YunoHost
 
-[![Tingkat integrasi](https://dash.yunohost.org/integration/gogs.svg)](https://ci-apps.yunohost.org/ci/apps/gogs/) ![Status kerja](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![Status pemeliharaan](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/gogs)](https://ci-apps.yunohost.org/ci/apps/gogs/)
+![Status kerja](https://apps.yunohost.org/badge/state/gogs)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/gogs)
 
 [![Pasang Gogs dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=gogs)
 

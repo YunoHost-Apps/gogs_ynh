@@ -5,7 +5,9 @@ It shall NOT be edited by hand.
 
 # Gogs for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/gogs.svg)](https://ci-apps.yunohost.org/ci/apps/gogs/) ![Working status](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)
+[![Integration level](https://apps.yunohost.org/badge/integration/gogs)](https://ci-apps.yunohost.org/ci/apps/gogs/)
+![Working status](https://apps.yunohost.org/badge/state/gogs)
+![Maintenance status](https://apps.yunohost.org/badge/maintained/gogs)
 
 [![Install Gogs with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=gogs)
 
