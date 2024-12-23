@@ -5,7 +5,9 @@ Hij mag NIET handmatig aangepast worden.
 
 # Gogs voor Yunohost
 
-[![Integratieniveau](https://dash.yunohost.org/integration/gogs.svg)](https://ci-apps.yunohost.org/ci/apps/gogs/) ![Mate van functioneren](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![Onderhoudsstatus](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)
+[![Integratieniveau](https://apps.yunohost.org/badge/integration/gogs)](https://ci-apps.yunohost.org/ci/apps/gogs/)
+![Mate van functioneren](https://apps.yunohost.org/badge/state/gogs)
+![Onderhoudsstatus](https://apps.yunohost.org/badge/maintained/gogs)
 
 [![Gogs met Yunohost installeren](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=gogs)
 
