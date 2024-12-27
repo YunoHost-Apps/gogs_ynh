@@ -5,7 +5,9 @@ EZ editatu eskuz.
 
 # Gogs YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/gogs)](https://ci-apps.yunohost.org/ci/apps/gogs/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/gogs)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/gogs)
 
 [![Instalatu Gogs YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=gogs)
 

@@ -5,7 +5,9 @@
 
 # YunoHost 上的 Gogs
 
-[![集成程度](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![工作状态](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)
+[![集成程度](https://apps.yunohost.org/badge/integration/gogs)](https://ci-apps.yunohost.org/ci/apps/gogs/)
+![工作状态](https://apps.yunohost.org/badge/state/gogs)
+![维护状态](https://apps.yunohost.org/badge/maintained/gogs)
 
 [![使用 YunoHost 安装 Gogs](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=gogs)
 

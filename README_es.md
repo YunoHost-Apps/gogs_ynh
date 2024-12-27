@@ -5,7 +5,9 @@ No se debe editar a mano.
 
 # Gogs para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/gogs.svg)](https://dash.yunohost.org/appci/app/gogs) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/gogs.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/gogs.maintain.svg)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/gogs)](https://ci-apps.yunohost.org/ci/apps/gogs/)
+![Estado funcional](https://apps.yunohost.org/badge/state/gogs)
+![Estado En Mantención](https://apps.yunohost.org/badge/maintained/gogs)
 
 [![Instalar Gogs con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=gogs)
 
@@ -48,7 +50,7 @@ Gogs (Go Git Service) is a git-based multiplatform forge written in Go. Its part
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/gogs_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/gogs_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 
