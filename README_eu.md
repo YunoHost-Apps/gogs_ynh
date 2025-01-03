@@ -32,7 +32,7 @@ Gogs (Go Git Service) is a git-based multiplatform forge written in Go. Its part
 - Authentication via SMTP, LDAP.
 
 
-**Paketatutako bertsioa:** 0.13.0~ynh3
+**Paketatutako bertsioa:** 0.13.2~ynh1
 
 **Demoa:** <https://try.gogs.io/user/login>
 
