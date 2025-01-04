@@ -6,7 +6,7 @@ name = "Gogs"
 description.en = "Lightweight self-hosted Git forge"
 description.fr = "Forge Git légère auto-hébergé"
 
-version = "0.13.0~ynh3"
+version = "0.13.2~ynh1"
 
 maintainers = []
 
@@ -49,10 +49,10 @@ ram.runtime = "50M"
 
  [resources.sources]
     [resources.sources.main]
-    amd64.url = "https://github.com/gogs/gogs/releases/download/v0.13.0/gogs_0.13.0_linux_amd64.tar.gz"
-    amd64.sha256 = "75da1c026cacb187a7c1dcad8263873ec566ce30cc0df56dd1dc129b8292d34f"
-    arm64.url = "https://github.com/gogs/gogs/releases/download/v0.13.0/gogs_0.13.0_linux_armv8.tar.gz"
-    arm64.sha256 = "3a8401ed3f9f9b73708c682f9b3211401dec01d3ce36294655b9394c28eab2e1"
+    amd64.url = "https://github.com/gogs/gogs/releases/download/v0.13.2/gogs_0.13.2_linux_amd64.tar.gz"
+    amd64.sha256 = "701084567c20e3e0a5dab511fefc933d4310d4ab96cdf4d80dd488a91f6de170"
+    arm64.url = "https://github.com/gogs/gogs/releases/download/v0.13.2/gogs_0.13.2_linux_armv8.tar.gz"
+    arm64.sha256 = "8386b3062f54eb586ea3656c0019944e09ce76e2498f43e4f7d3a306841af55f"
 
     autoupdate.strategy = "latest_github_release"
     autoupdate.asset.amd64 = "gogs_.*_linux_amd64.tar.gz"
