@@ -24,13 +24,6 @@ mkdir -p "$install_dir/custom/conf/auth.d"
 #=================================================
 ynh_script_progression "Adding $app's configuration..."
 
-if [ "$path" = "/" ]
-then
-	url="$domain"
-else
-    url="$domain${path%/}"
-fi
-
 ynh_config_add --template="app.ini" --destination="$install_dir/custom/conf/app.ini"
 
 ynh_config_add --template="ldap.conf" --destination="$install_dir/custom/conf/auth.d/ldap.conf"

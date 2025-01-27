@@ -21,19 +21,7 @@ ynh_config_change_url_nginx
 # SPECIFIC MODIFICATIONS
 #=================================================
 
-if [ "$path_url" = "/" ]
-then
-	url="$new_domain"
-else
-    url="$new_domain${new_path%/}"
-fi
-
-domain=$new_domain
-
 ynh_config_add --template="app.ini" --destination="$install_dir/custom/conf/app.ini"
-
-chmod 400 "$install_dir/custom/conf/app.ini"
-chown $app:$app "$install_dir/custom/conf/app.ini"
 
 #=================================================
 # START SYSTEMD SERVICE
