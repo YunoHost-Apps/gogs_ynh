@@ -34,7 +34,6 @@ Gogs (Go Git Service) is a git-based multiplatform forge written in Go. Its part
 
 **Versi terkirim:** 0.13.2~ynh1
 
-
 **Demo:** <https://try.gogs.io/user/login>
 
 ## Tangkapan Layar
