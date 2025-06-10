@@ -29,17 +29,17 @@ ynh_config_add --template="app.ini" --destination="$install_dir/custom/conf/app.
 ynh_config_add --template="ldap.conf" --destination="$install_dir/custom/conf/auth.d/ldap.conf"
 
 #=================================================
-# SETUP SYSTEMD
+# SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression "Configuring $app's systemd service..."
-
-ynh_config_add_systemd
+ynh_script_progression "Adding system configurations related to $app..."
 
 ynh_config_add_nginx
 
-ynh_config_add_logrotate
+ynh_config_add_systemd
 
 yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
+
+ynh_config_add_logrotate
 
 #=================================================
 # START SYSTEMD SERVICE
