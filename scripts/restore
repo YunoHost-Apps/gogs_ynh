@@ -42,7 +42,7 @@ yunohost service add $app --description="Lightweight Git forge" --log="/var/log/
 # RESTORE VARIOUS FILES
 #=================================================
 
-ynh_restore "/var/log/$app/"
+mkdir -p /var/log/"$app"
 
 #=================================================
 # START SYSTEMD SERVICE
