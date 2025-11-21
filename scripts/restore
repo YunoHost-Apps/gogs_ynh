@@ -41,7 +41,7 @@ yunohost service add $app --description="Lightweight Git forge" --log="/var/log/
 # RESTORE VARIOUS FILES
 #=================================================
 
-ynh_restore_file "/var/log/$app"
+ynh_restore "/var/log/$app"
 chown -R $app:$app "/var/log/$app"
 chmod u=rwX,g=rX,o= "/var/log/$app"
 
