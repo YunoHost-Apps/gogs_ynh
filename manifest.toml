@@ -18,7 +18,8 @@ admindoc = "https://gogs.io/docs"
 code = "https://github.com/gogs/gogs"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 12.1.17"
+helpers_version = "2.1"
 architectures = ["amd64", "arm64"]
 multi_instance = true
 
