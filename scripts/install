@@ -1,6 +1,5 @@
 #!/bin/bash
 
-source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -8,64 +7,51 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 key=$(ynh_string_random)
-ynh_app_setting_set --app=$app --key=key --value=$key
+ynh_app_setting_set --key=key --value=$key
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up source files..." --weight=3
+ynh_script_progression "Setting up source files..."
 
 ynh_setup_source --dest_dir=$install_dir
 
 mkdir -p "$install_dir/custom/conf/auth.d"
 
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
-
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..." --weight=1
+ynh_script_progression "Adding $app's configuration..."
 
-if [ "$path" = "/" ]
-then
-	url="$domain"
-else
-    url="$domain${path%/}"
-fi
+ynh_config_add --template="app.ini" --destination="$install_dir/custom/conf/app.ini"
 
-ynh_add_config --template="app.ini" --destination="$install_dir/custom/conf/app.ini"
-
-chmod 400 "$install_dir/custom/conf/app.ini"
-chown $app:$app "$install_dir/custom/conf/app.ini"
-
-ynh_add_config --template="ldap.conf" --destination="$install_dir/custom/conf/auth.d/ldap.conf"
+ynh_config_add --template="ldap.conf" --destination="$install_dir/custom/conf/auth.d/ldap.conf"
 
 #=================================================
-# SETUP SYSTEMD
+# SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring a systemd service..." --weight=1
+ynh_script_progression "Adding system configurations related to $app..."
 
-ynh_add_systemd_config
+ynh_config_add_nginx
 
-ynh_add_nginx_config
+ynh_config_add_systemd
 
-ynh_use_logrotate
+yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
+
+ynh_config_add_logrotate
 
 chown -R $app:$app "/var/log/$app"
 chmod u=rwX,g=rX,o= "/var/log/$app"
 
-yunohost service add $app --description="Lightweight Git forge" --log="/var/log/$app/$app.log"
-
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=3
+ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
+ynh_systemctl --service=$app --action="start" --log_path="systemd"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression "Installation of $app completed"

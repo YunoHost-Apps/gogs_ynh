@@ -6,7 +6,7 @@ name = "Gogs"
 description.en = "Lightweight self-hosted Git forge"
 description.fr = "Forge Git légère auto-hébergé"
 
-version = "0.13.3~ynh1"
+version = "0.13.3~ynh2"
 
 maintainers = []
 
@@ -18,12 +18,12 @@ admindoc = "https://gogs.io/docs"
 code = "https://github.com/gogs/gogs"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 12.1.17"
+helpers_version = "2.1"
 architectures = ["amd64", "arm64"]
 multi_instance = true
 
 ldap = true
-
 sso = true
 
 disk = "50M"
