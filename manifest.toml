@@ -49,9 +49,9 @@ ram.runtime = "50M"
 
  [resources.sources]
     [resources.sources.main]
-    amd64.url = "https://github.com/gogs/gogs/releases/download/v0.14.2/gogs_v0.14.2_linux_amd64.tar.gz "
+    amd64.url = "https://github.com/gogs/gogs/releases/download/v0.14.2/gogs_v0.14.2_linux_amd64.tar.gz"
     amd64.sha256 = "0d62805cbeb870d944b05916b01dbddcb22c1b03d64236817b172ed7870bd48d"
-    arm64.url = "https://github.com/gogs/gogs/releases/download/v0.14.2/gogs_v0.14.2_linux_arm64.tar.gz "
+    arm64.url = "https://github.com/gogs/gogs/releases/download/v0.14.2/gogs_v0.14.2_linux_arm64.tar.gz"
     arm64.sha256 = "72eb62dfb7cdcf42a2f57b07a405d59a6614107e4ffee153138eb60c71f4e9fe"
 
     autoupdate.strategy = "latest_github_release"
